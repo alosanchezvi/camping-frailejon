@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salidas — Camping Frailejón</title>
+  <meta name="description" content="Rutas de trekking en el páramo. Mapas, tracks GPX y waypoints.">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/frailejon-icon.svg">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="#8faa7f" stroke-width="2" fill="none"/>
+          <path d="M20 8 L20 32 M14 14 Q20 10 26 14 M14 20 Q20 16 26 20 M14 26 Q20 22 26 26" stroke="#8faa7f" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Camping Frailejón
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/salidas.html" class="active">Salidas</a></li>
+        <li><a href="/actividades.html">Actividades</a></li>
+        <li><a href="/galeria.html">Galería</a></li>
+        <li><a href="/nosotros.html">Nosotros</a></li>
+      </ul>
+      <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
+    </div>
+  </nav>
+
+  <section class="section" style="padding-top: 24px;">
+    <div class="section-header">
+      <h2>🥾 Salidas de Trekking</h2>
+      <p>Rutas documentadas con mapa, waypoints y tracks descargables</p>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Mapa -->
+    <div class="map-container" id="mapaSalidas"></div>
+
+    <!-- Filtros -->
+    <div style="display: flex; gap: 10px; justify-content: center; margin: 28px 0; flex-wrap: wrap;">
+      <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('todas')">Todas</button>
+      <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('fácil')">🟢 Fácil</button>
+      <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('moderada')">🟡 Moderada</button>
+      <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('difícil')">🔴 Difícil</button>
+    </div>
+
+    <!-- Lista de salidas -->
+    <div class="cards-grid" id="salidasLista">
+      <!-- Laguna Azul -->
+      <div class="card salida-item" data-dificultad="moderada">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop" alt="Laguna Azul" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-salida">Salida</span>
+          <h3>🌊 Laguna Azul</h3>
+          <div class="card-meta">
+            <span>📅 23 Ago 2026</span>
+            <span>⏱️ 4h 30min</span>
+            <span>📏 8.5 km</span>
+            <span>📈 650m+</span>
+          </div>
+          <p>Sendero que atraviesa bosque de frailejones con vista panorámica al valle. Ideal para amanecer. Punto de encuentro: Camping Frailejón 06:00 AM.</p>
+          <div style="margin: 12px 0;">
+            <span class="card-tag tag-moderada">Moderada</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--gris-neblina); margin-bottom: 12px;">
+            ⚠️ Niebla después de las 14:00 · Tramo rocoso en km 3.2
+          </div>
+          <div class="card-footer">
+            <a href="#" class="btn btn-small btn-primary">📥 Descargar GPX</a>
+            <a href="#" class="btn btn-small btn-secondary">Ver ruta →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cerro Morado -->
+      <div class="card salida-item" data-dificultad="difícil">
+        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop" alt="Cerro Morado" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-salida">Salida</span>
+          <h3>⛰️ Cerro Morado</h3>
+          <div class="card-meta">
+            <span>📅 30 Ago 2026</span>
+            <span>⏱️ 6h</span>
+            <span>📏 12 km</span>
+            <span>📈 1,200m+</span>
+          </div>
+          <p>Ascenso al mirador más alto de la región. Requiere buena condición física y llevar bastones. Vistas 360° del páramo.</p>
+          <div style="margin: 12px 0;">
+            <span class="card-tag tag-dificil">Difícil</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--gris-neblina); margin-bottom: 12px;">
+            ⚠️ Altura máxima 4,100m · Llevar protector solar · Agua limitada después del km 5
+          </div>
+          <div class="card-footer">
+            <a href="#" class="btn btn-small btn-primary">📥 Descargar GPX</a>
+            <a href="#" class="btn btn-small btn-secondary">Ver ruta →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bosque Encantado -->
+      <div class="card salida-item" data-dificultad="fácil">
+        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop" alt="Bosque Encantado" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-salida">Salida</span>
+          <h3>🌲 Bosque Encantado</h3>
+          <div class="card-meta">
+            <span>📅 06 Sep 2026</span>
+            <span>⏱️ 3h</span>
+            <span>📏 5 km</span>
+            <span>📈 200m+</span>
+          </div>
+          <p>Caminata suave entre frailejones gigantes y musgo. Perfecta para familias y primerizos. Incluye picnic en el km 2.5.</p>
+          <div style="margin: 12px 0;">
+            <span class="card-tag tag-facil">Fácil</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--gris-neblina); margin-bottom: 12px;">
+            ✅ Sendero señalizado · Baños en el km 1.5 · Ideal para niños
+          </div>
+          <div class="card-footer">
+            <a href="#" class="btn btn-small btn-primary">📥 Descargar GPX</a>
+            <a href="#" class="btn btn-small btn-secondary">Ver ruta →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cascada del Frailejón -->
+      <div class="card salida-item" data-dificultad="moderada">
+        <img src="https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=600&h=400&fit=crop" alt="Cascada" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-salida">Salida</span>
+          <h3>💧 Cascada del Frailejón</h3>
+          <div class="card-meta">
+            <span>📅 13 Sep 2026</span>
+            <span>⏱️ 5h</span>
+            <span>📏 9 km</span>
+            <span>📈 800m+</span>
+          </div>
+          <p>Ruta hacia una cascada de 40m de altura escondida en el bosque de neblina. Último tramo con cuerdas fijas.</p>
+          <div style="margin: 12px 0;">
+            <span class="card-tag tag-moderada">Moderada</span>
+          </div>
+          <div style="font-size: 0.8rem; color: var(--gris-neblina); margin-bottom: 12px;">
+            ⚠️ Llevar impermeable · Tramo con cuerdas · No apto para vertigo
+          </div>
+          <div class="card-footer">
+            <a href="#" class="btn btn-small btn-primary">📥 Descargar GPX</a>
+            <a href="#" class="btn btn-small btn-secondary">Ver ruta →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>🏕️ Camping Frailejón</h4>
+        <p>Tu refugio en el páramo.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explorar</h4>
+        <a href="/salidas.html">Salidas</a>
+        <a href="/actividades.html">Actividades</a>
+        <a href="/galeria.html">Galería</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>📍 Páramo de Sumapaz</p>
+        <p>📱 +57 300 123 4567</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Camping Frailejón · Hecho con 🌿 en el páramo</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+    // Mapa de salidas
+    var map = L.map('mapaSalidas').setView([4.123, -74.123], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Waypoints de ejemplo
+    var waypoints = [
+      { lat: 4.123, lng: -74.123, title: "Laguna Azul", diff: "moderada" },
+      { lat: 4.145, lng: -74.110, title: "Cerro Morado", diff: "difícil" },
+      { lat: 4.115, lng: -74.135, title: "Bosque Encantado", diff: "fácil" },
+      { lat: 4.130, lng: -74.100, title: "Cascada del Frailejón", diff: "moderada" }
+    ];
+
+    waypoints.forEach(function(wp) {
+      var color = wp.diff === 'fácil' ? '#4caf50' : wp.diff === 'moderada' ? '#ff9800' : '#f44336';
+      L.circleMarker([wp.lat, wp.lng], {
+        radius: 10,
+        fillColor: color,
+        color: '#fff',
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.8
+      }).addTo(map).bindPopup('<b>' + wp.title + '</b><br>Dificultad: ' + wp.diff);
+    });
+
+    // Filtro de salidas
+    function filtrarSalidas(filtro) {
+      var items = document.querySelectorAll('.salida-item');
+      items.forEach(function(item) {
+        if (filtro === 'todas' || item.dataset.dificultad === filtro) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

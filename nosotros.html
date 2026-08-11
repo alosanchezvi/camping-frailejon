@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nosotros — Camping Frailejón</title>
+  <meta name="description" content="Conoce Camping Frailejón. Nuestra historia, valores y cómo llegar al páramo.">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/frailejon-icon.svg">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="#8faa7f" stroke-width="2" fill="none"/>
+          <path d="M20 8 L20 32 M14 14 Q20 10 26 14 M14 20 Q20 16 26 20 M14 26 Q20 22 26 26" stroke="#8faa7f" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Camping Frailejón
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/salidas.html">Salidas</a></li>
+        <li><a href="/actividades.html">Actividades</a></li>
+        <li><a href="/galeria.html">Galería</a></li>
+        <li><a href="/nosotros.html" class="active">Nosotros</a></li>
+      </ul>
+      <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
+    </div>
+  </nav>
+
+  <section class="section" style="padding-top: 24px;">
+    <div class="section-header">
+      <h2>🏕️ Sobre Camping Frailejón</h2>
+      <p>Un refugio en el corazón del páramo</p>
+      <div class="section-divider"></div>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&h=600&fit=crop" alt="Camping Frailejón">
+      </div>
+      <div class="about-text">
+        <h3>Nuestra Historia</h3>
+        <p>
+          Camping Frailejón nació en 2024 de la pasión por el páramo y la necesidad de un espacio
+          donde viajeros de larga distancia —en camper, bicicleta o a pie— pudieran descansar,
+          compartir historias y prepararse para la siguiente aventura.
+        </p>
+        <p>
+          Ubicado en el Páramo de Sumapaz, a 3,400 metros de altura, somos punto de encuentro
+          tanto para viajeros que recorren Colombia como para locales que buscan desconectarse
+          de la ciudad y reconectar con la naturaleza.
+        </p>
+        <p>
+          Aquí no solo ofrecemos un lugar para dormir. Ofrecemos comunidad: fogatas compartidas,
+          salidas de trekking guiadas, talleres de yoga al amanecer y noches de astronomía
+          bajo un cielo sin contaminación lumínica.
+        </p>
+
+        <div class="about-values">
+          <div class="value-item">
+            <h4>🌿 Conservación</h4>
+            <p>Protegemos el frailejón y el páramo como fuente de vida.</p>
+          </div>
+          <div class="value-item">
+            <h4>🤝 Comunidad</h4>
+            <p>Espacio de encuentro para viajeros de todo el mundo.</p>
+          </div>
+          <div class="value-item">
+            <h4>🥾 Aventura</h4>
+            <p>Rutas documentadas y actividades para todos los niveles.</p>
+          </div>
+          <div class="value-item">
+            <h4>♻️ Sostenibilidad</h4>
+            <p>Energía solar, compostaje y manejo responsable de residuos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Servicios -->
+    <div style="margin-top: 60px;">
+      <div class="section-header">
+        <h2>🛏️ Qué Ofrecemos</h2>
+        <p>Todo lo que necesitas para tu estadía en el páramo</p>
+        <div class="section-divider"></div>
+      </div>
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-body" style="text-align: center; padding: 28px;">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;">⛺</div>
+            <h3>Zona de Camping</h3>
+            <p>Espacios para tienda de campaña con vista al valle. Agua caliente, baños compartidos y área de cocina comunitaria.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body" style="text-align: center; padding: 28px;">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;">🚐</div>
+            <h3>Parqueadero Camper</h3>
+            <p>Espacio seguro para vehículos camper y furgonetas. Conexión eléctrica 110V y punto de descarga de aguas grises.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body" style="text-align: center; padding: 28px;">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;">🚿</div>
+            <h3>Duchas Calientes</h3>
+            <p>Duchas con agua caliente solar disponibles de 6:00 AM a 9:00 PM. Toallas disponibles para préstamo.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body" style="text-align: center; padding: 28px;">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;">📶</div>
+            <h3>WiFi Zona Común</h3>
+            <p>Conexión a internet en la zona de fogata y comedor. Velocidad limitada pero funcional para mensajes y correos.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body" style="text-align: center; padding: 28px;">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;">🍳</div>
+            <h3>Cocina Comunitaria</h3>
+            <p>Estufa a gas, nevera compartida, utensilios básicos y especias. Ideal para preparar tu propia comida.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-body" style="text-align: center; padding: 28px;">
+            <div style="font-size: 2.5rem; margin-bottom: 12px;">🔥</div>
+            <h3>Fogata Nocturna</h3>
+            <p>Todas las noches encendemos la fogata principal. Chocolate caliente, historias y estrellas incluidas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cómo llegar -->
+    <div style="margin-top: 60px;">
+      <div class="section-header">
+        <h2>🗺️ Cómo Llegar</h2>
+        <p>Coordenadas y rutas de acceso</p>
+        <div class="section-divider"></div>
+      </div>
+      <div style="background: rgba(255,255,255,0.04); border-radius: 16px; padding: 28px; border: 1px solid rgba(138,170,127,0.12);">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: start;">
+          <div>
+            <h4 style="color: var(--blanco); margin-bottom: 12px;">📍 Ubicación</h4>
+            <p style="color: var(--gris-neblina); margin-bottom: 16px;">
+              Vereda El Silencio, Páramo de Sumapaz<br>
+              Municipio de Pasca, Cundinamarca, Colombia<br>
+              <b>Coordenadas:</b> 4.123456, -74.123456
+            </p>
+            <h4 style="color: var(--blanco); margin-bottom: 12px;">🚗 En vehículo</h4>
+            <p style="color: var(--gris-neblina); margin-bottom: 16px;">
+              Desde Bogotá: 2h 30min por la vía a Pasca. Últimos 8 km son trocha.
+              Recomendado vehículo 4x4 en temporada de lluvias.
+            </p>
+            <h4 style="color: var(--blanco); margin-bottom: 12px;">🚌 Transporte público</h4>
+            <p style="color: var(--gris-neblina); margin-bottom: 16px;">
+              Bus desde Portal Sur (Bogotá) a Pasca. Desde Pasca, jeep compartido
+              hasta la vereda (preguntar por "Camping Frailejón").
+            </p>
+            <h4 style="color: var(--blanco); margin-bottom: 12px;">🚲 En bicicleta</h4>
+            <p style="color: var(--gris-neblina);">
+              Ruta desde Bogotá: 85 km con 2,400m de ascenso. Último tramo de trocha
+              es transitable en gravel. Agua y descanso disponibles en el camping.
+            </p>
+          </div>
+          <div>
+            <div class="map-container" id="mapaUbicacion" style="height: 350px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contacto -->
+    <div style="margin-top: 60px;">
+      <div class="section-header">
+        <h2>📞 Contacto</h2>
+        <p>Escríbenos por cualquier canal</p>
+        <div class="section-divider"></div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+        <div style="background: rgba(255,255,255,0.04); border-radius: 12px; padding: 24px; text-align: center; border: 1px solid rgba(138,170,127,0.1);">
+          <div style="font-size: 2rem; margin-bottom: 8px;">📱</div>
+          <h4 style="color: var(--blanco); margin-bottom: 4px;">WhatsApp</h4>
+          <p style="color: var(--gris-neblina); font-size: 0.9rem;">+57 300 123 4567</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border-radius: 12px; padding: 24px; text-align: center; border: 1px solid rgba(138,170,127,0.1);">
+          <div style="font-size: 2rem; margin-bottom: 8px;">✉️</div>
+          <h4 style="color: var(--blanco); margin-bottom: 4px;">Email</h4>
+          <p style="color: var(--gris-neblina); font-size: 0.9rem;">hola@campingfrailejon.com</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border-radius: 12px; padding: 24px; text-align: center; border: 1px solid rgba(138,170,127,0.1);">
+          <div style="font-size: 2rem; margin-bottom: 8px;">📸</div>
+          <h4 style="color: var(--blanco); margin-bottom: 4px;">Instagram</h4>
+          <p style="color: var(--gris-neblina); font-size: 0.9rem;">@campingfrailejon</p>
+        </div>
+        <div style="background: rgba(255,255,255,0.04); border-radius: 12px; padding: 24px; text-align: center; border: 1px solid rgba(138,170,127,0.1);">
+          <div style="font-size: 2rem; margin-bottom: 8px;">💬</div>
+          <h4 style="color: var(--blanco); margin-bottom: 4px;">Reservas</h4>
+          <p style="color: var(--gris-neblina); font-size: 0.9rem;">Responde en 2h</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>🏕️ Camping Frailejón</h4>
+        <p>Tu refugio en el páramo.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explorar</h4>
+        <a href="/salidas.html">Salidas</a>
+        <a href="/actividades.html">Actividades</a>
+        <a href="/galeria.html">Galería</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>📍 Páramo de Sumapaz</p>
+        <p>📱 +57 300 123 4567</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Camping Frailejón · Hecho con 🌿 en el páramo</p>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script>
+    // Mapa de ubicación
+    var map = L.map('mapaUbicacion').setView([4.123, -74.123], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+    L.marker([4.123, -74.123]).addTo(map)
+      .bindPopup('<b>Camping Frailejón</b><br>Tu refugio en el páramo')
+      .openPopup();
+  </script>
+</body>
+</html>

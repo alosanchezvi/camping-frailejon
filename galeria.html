@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Galería — Camping Frailejón</title>
+  <meta name="description" content="Fotos del páramo, frailejones, fauna y momentos en Camping Frailejón.">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/frailejon-icon.svg">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="#8faa7f" stroke-width="2" fill="none"/>
+          <path d="M20 8 L20 32 M14 14 Q20 10 26 14 M14 20 Q20 16 26 20 M14 26 Q20 22 26 26" stroke="#8faa7f" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Camping Frailejón
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/salidas.html">Salidas</a></li>
+        <li><a href="/actividades.html">Actividades</a></li>
+        <li><a href="/galeria.html" class="active">Galería</a></li>
+        <li><a href="/nosotros.html">Nosotros</a></li>
+      </ul>
+      <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
+    </div>
+  </nav>
+
+  <section class="section" style="padding-top: 24px;">
+    <div class="section-header">
+      <h2>🖼️ Galería</h2>
+      <p>Imágenes del páramo capturadas por nuestra comunidad</p>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Filtros de galería -->
+    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 32px; flex-wrap: wrap;">
+      <button class="btn btn-small btn-secondary" onclick="filtrarGaleria('todas')">Todas</button>
+      <button class="btn btn-small btn-secondary" onclick="filtrarGaleria('paisaje')">🏔️ Paisaje</button>
+      <button class="btn btn-small btn-secondary" onclick="filtrarGaleria('flora')">🌿 Flora</button>
+      <button class="btn btn-small btn-secondary" onclick="filtrarGaleria('fauna')">🦅 Fauna</button>
+      <button class="btn btn-small btn-secondary" onclick="filtrarGaleria('gente')">👥 Gente</button>
+      <button class="btn btn-small btn-secondary" onclick="filtrarGaleria('dron')">🚁 Dron</button>
+      <button class="btn btn-small btn-secondary" onclick="filtrarGaleria('evento')">🎉 Evento</button>
+    </div>
+
+    <div class="gallery-grid" id="galeriaContainer">
+      <div class="gallery-item" data-categoria="paisaje">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=450&fit=crop" alt="Amanecer en el páramo">
+        <div class="gallery-overlay">
+          <h4>Amanecer en el páramo</h4>
+          <p>📷 @campingfrailejon · Vista desde la Laguna Azul</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="flora">
+        <img src="https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=600&h=450&fit=crop" alt="Frailejón gigante">
+        <div class="gallery-overlay">
+          <h4>Frailejón gigante</h4>
+          <p>📷 @mariafotos · Bosque Encantado</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="dron">
+        <img src="https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=600&h=450&fit=crop" alt="Vista aérea del valle">
+        <div class="gallery-overlay">
+          <h4>Vista aérea del valle</h4>
+          <p>🚁 DJI Mini 3 · 80m de altura</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="gente">
+        <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&h=450&fit=crop" alt="Grupo en la cima">
+        <div class="gallery-overlay">
+          <h4>Grupo en la cima</h4>
+          <p>📷 @carlostrek · Cerro Morado</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="paisaje">
+        <img src="https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?w=600&h=450&fit=crop" alt="Cascada del Frailejón">
+        <div class="gallery-overlay">
+          <h4>Cascada del Frailejón</h4>
+          <p>📷 @campingfrailejon · Después de la lluvia</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="fauna">
+        <img src="https://images.unsplash.com/photo-1552728089-57bdde30beb8?w=600&h=450&fit=crop" alt="Colibrí esmeralda">
+        <div class="gallery-overlay">
+          <h4>Colibrí esmeralda</h4>
+          <p>📷 @anafotos · Cerca del camping</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="evento">
+        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&h=450&fit=crop" alt="Yoga al amanecer">
+        <div class="gallery-overlay">
+          <h4>Yoga al amanecer</h4>
+          <p>📷 @campingfrailejon · Taller de agosto</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="dron">
+        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=450&fit=crop" alt="Sendero desde el aire">
+        <div class="gallery-overlay">
+          <h4>Sendero desde el aire</h4>
+          <p>🚁 DJI Mini 3 · Ruta a la Laguna</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="flora">
+        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=450&fit=crop" alt="Musgo y helechos">
+        <div class="gallery-overlay">
+          <h4>Musgo y helechos</h4>
+          <p>📷 @campingfrailejon · Bosque de neblina</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="gente">
+        <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=600&h=450&fit=crop" alt="Cocina de altura">
+        <div class="gallery-overlay">
+          <h4>Cocina de altura</h4>
+          <p>📷 @pedrochef · Taller julio 2026</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="paisaje">
+        <img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=600&h=450&fit=crop" alt="Noche estrellada">
+        <div class="gallery-overlay">
+          <h4>Noche estrellada</h4>
+          <p>📷 @carlostrek · Observación astronómica</p>
+        </div>
+      </div>
+      <div class="gallery-item" data-categoria="fauna">
+        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=450&fit=crop" alt="Zorro andino">
+        <div class="gallery-overlay">
+          <h4>Zorro andino</h4>
+          <p>📷 @mariafotos · Trekking nocturno</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA para subir fotos -->
+    <div style="text-align: center; margin-top: 48px; padding: 32px; background: rgba(255,255,255,0.03); border-radius: 16px; border: 1px dashed rgba(138, 170, 127, 0.3);">
+      <p style="font-size: 1.1rem; color: var(--blanco); margin-bottom: 8px;">📸 ¿Tienes fotos del páramo?</p>
+      <p style="color: var(--gris-neblina); margin-bottom: 16px;">Súbelas a Instagram con el hashtag <b style="color:var(--verde-musgo);">#CampingFrailejon</b> y aparecerán aquí.</p>
+      <a href="https://instagram.com" target="_blank" class="btn btn-secondary">Ir a Instagram</a>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>🏕️ Camping Frailejón</h4>
+        <p>Tu refugio en el páramo.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explorar</h4>
+        <a href="/salidas.html">Salidas</a>
+        <a href="/actividades.html">Actividades</a>
+        <a href="/galeria.html">Galería</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>📍 Páramo de Sumapaz</p>
+        <p>📱 +57 300 123 4567</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Camping Frailejón · Hecho con 🌿 en el páramo</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+  <script>
+    function filtrarGaleria(filtro) {
+      var items = document.querySelectorAll('.gallery-item');
+      items.forEach(function(item) {
+        if (filtro === 'todas' || item.dataset.categoria === filtro) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

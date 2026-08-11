@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actividades — Camping Frailejón</title>
+  <meta name="description" content="Talleres, charlas y actividades en el camping. Yoga, astronomía, fotografía y más.">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/frailejon-icon.svg">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="#8faa7f" stroke-width="2" fill="none"/>
+          <path d="M20 8 L20 32 M14 14 Q20 10 26 14 M14 20 Q20 16 26 20 M14 26 Q20 22 26 26" stroke="#8faa7f" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Camping Frailejón
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/">Inicio</a></li>
+        <li><a href="/salidas.html">Salidas</a></li>
+        <li><a href="/actividades.html" class="active">Actividades</a></li>
+        <li><a href="/galeria.html">Galería</a></li>
+        <li><a href="/nosotros.html">Nosotros</a></li>
+      </ul>
+      <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
+    </div>
+  </nav>
+
+  <section class="section" style="padding-top: 24px;">
+    <div class="section-header">
+      <h2>📅 Actividades Especiales</h2>
+      <p>Talleres, charlas y experiencias únicas en el corazón del páramo</p>
+      <div class="section-divider"></div>
+    </div>
+
+    <!-- Próximas actividades -->
+    <div class="cards-grid">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&h=400&fit=crop" alt="Yoga" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-actividad">Taller</span>
+          <h3>🧘 Yoga entre Frailejones</h3>
+          <div class="card-meta">
+            <span>📅 Sáb 16 Ago 2026</span>
+            <span>🕕 06:00 AM</span>
+            <span>⏱️ 1h 30min</span>
+          </div>
+          <p>Sesión de yoga al amanecer con vista al valle. Incluye mate de coca y meditación guiada. Instructor: María Ríos.</p>
+          <div style="margin: 12px 0; font-size: 0.8rem; color: var(--gris-neblina);">
+            🎒 Traer: Mat de yoga, agua, ropa cómoda, chaqueta ligera
+          </div>
+          <div class="card-footer">
+            <span style="font-size:0.9rem;color:var(--verde-musgo);font-weight:600;">💰 Gratis</span>
+            <a href="#" class="btn btn-small btn-primary">Reservar cupo</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=600&h=400&fit=crop" alt="Astronomía" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-evento">Evento</span>
+          <h3>🔭 Observación Astronómica</h3>
+          <div class="card-meta">
+            <span>📅 Vie 22 Ago 2026</span>
+            <span>🕗 08:00 PM</span>
+            <span>⏱️ 2h</span>
+          </div>
+          <p>Noche de estrellas con telescopio profesional. Charla sobre constelaciones del hemisferio sur y mitología andina. Guía: Carlos Mendoza.</p>
+          <div style="margin: 12px 0; font-size: 0.8rem; color: var(--gris-neblina);">
+            🎒 Traer: Chaqueta abrigada, linterna roja, cuaderno
+          </div>
+          <div class="card-footer">
+            <span style="font-size:0.9rem;color:var(--acento-dorado);font-weight:600;">💰 $15.000 COP</span>
+            <a href="#" class="btn btn-small btn-primary">Reservar cupo</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=600&h=400&fit=crop" alt="Fotografía" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-actividad">Taller</span>
+          <h3>📸 Fotografía en el Páramo</h3>
+          <div class="card-meta">
+            <span>📅 Dom 24 Ago 2026</span>
+            <span>🕔 05:00 AM</span>
+            <span>⏱️ 4h</span>
+          </div>
+          <p>Taller práctico de fotografía de paisaje y fauna del páramo. Técnicas de luz dorada, neblina y macro. Instructor: Ana Torres.</p>
+          <div style="margin: 12px 0; font-size: 0.8rem; color: var(--gris-neblina);">
+            🎒 Traer: Cámara o celular, trípode (opcional), baterías extra
+          </div>
+          <div class="card-footer">
+            <span style="font-size:0.9rem;color:var(--acento-dorado);font-weight:600;">💰 $35.000 COP</span>
+            <a href="#" class="btn btn-small btn-primary">Reservar cupo</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&h=400&fit=crop" alt="Buceo" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-actividad">Charla</span>
+          <h3>🌿 Frailejones: Guardianes del Agua</h3>
+          <div class="card-meta">
+            <span>📅 Sáb 31 Ago 2026</span>
+            <span>🕙 10:00 AM</span>
+            <span>⏱️ 1h 30min</span>
+          </div>
+          <p>Charla sobre la importancia ecológica del frailejón en el páramo. Mitos, ciencia y conservación. Ponente: Dr. Luis Hernández, biólogo.</p>
+          <div style="margin: 12px 0; font-size: 0.8rem; color: var(--gris-neblina);">
+            🎒 Traer: Curiosidad y preguntas
+          </div>
+          <div class="card-footer">
+            <span style="font-size:0.9rem;color:var(--verde-musgo);font-weight:600;">💰 Gratis</span>
+            <a href="#" class="btn btn-small btn-primary">Reservar cupo</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?w=600&h=400&fit=crop" alt="Cocina" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-actividad">Taller</span>
+          <h3>🍲 Cocina de Altura</h3>
+          <div class="card-meta">
+            <span>📅 Dom 07 Sep 2026</span>
+            <span>🕚 11:00 AM</span>
+            <span>⏱️ 2h</span>
+          </div>
+          <p>Aprende a cocinar con ingredientes del páramo: papa criolla, cubios, almojábanas y chocolate santafereño. Chef invitado: Pedro Gómez.</p>
+          <div style="margin: 12px 0; font-size: 0.8rem; color: var(--gris-neblina);">
+            🎒 Todo incluido · Cupo limitado a 12 personas
+          </div>
+          <div class="card-footer">
+            <span style="font-size:0.9rem;color:var(--acento-dorado);font-weight:600;">💰 $25.000 COP</span>
+            <a href="#" class="btn btn-small btn-primary">Reservar cupo</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actividades pasadas -->
+    <div style="margin-top: 60px;">
+      <div class="section-header">
+        <h2>✅ Actividades Realizadas</h2>
+        <p>Lo que ya vivimos juntos</p>
+        <div class="section-divider"></div>
+      </div>
+      <div class="cards-grid">
+        <div class="card" style="opacity: 0.7;">
+          <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&h=400&fit=crop" alt="Trekking nocturno" class="card-image">
+          <div class="card-body">
+            <span class="card-tag tag-salida">Realizada</span>
+            <h3>🌙 Trekking Nocturno</h3>
+            <div class="card-meta">
+              <span>📅 02 Ago 2026</span>
+              <span>👥 18 participantes</span>
+            </div>
+            <p>Caminata bajo la luna llena con linternas frontales. Avistamiento de zorro andino y búhos.</p>
+          </div>
+        </div>
+        <div class="card" style="opacity: 0.7;">
+          <img src="https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=600&h=400&fit=crop" alt="Dibujo natural" class="card-image">
+          <div class="card-body">
+            <span class="card-tag tag-actividad">Realizada</span>
+            <h3>🎨 Dibujo de Naturaleza</h3>
+            <div class="card-meta">
+              <span>📅 19 Jul 2026</span>
+              <span>👥 12 participantes</span>
+            </div>
+            <p>Taller de ilustración botánica en el campo. Cada participante se llevó un dibujo del frailejón.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>🏕️ Camping Frailejón</h4>
+        <p>Tu refugio en el páramo.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explorar</h4>
+        <a href="/salidas.html">Salidas</a>
+        <a href="/actividades.html">Actividades</a>
+        <a href="/galeria.html">Galería</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>📍 Páramo de Sumapaz</p>
+        <p>📱 +57 300 123 4567</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Camping Frailejón · Hecho con 🌿 en el páramo</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>

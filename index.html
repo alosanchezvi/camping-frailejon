@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Camping Frailejón — Páramo, Neblina y Aventura</title>
+  <meta name="description" content="Camping Frailejón: salidas de trekking, actividades al aire libre y experiencias en el páramo.">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/frailejon-icon.svg">
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+  <!-- Navegación -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18" stroke="#8faa7f" stroke-width="2" fill="none"/>
+          <path d="M20 8 L20 32 M14 14 Q20 10 26 14 M14 20 Q20 16 26 20 M14 26 Q20 22 26 26" stroke="#8faa7f" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Camping Frailejón
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="active">Inicio</a></li>
+        <li><a href="/salidas.html">Salidas</a></li>
+        <li><a href="/actividades.html">Actividades</a></li>
+        <li><a href="/galeria.html">Galería</a></li>
+        <li><a href="/nosotros.html">Nosotros</a></li>
+      </ul>
+      <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-content">
+      <div class="hero-icon">🌿</div>
+      <h1>Camping Frailejón</h1>
+      <p class="hero-subtitle">Páramo · Neblina · Aventura</p>
+      <p class="hero-desc">
+        Explora los senderos del páramo, respira la neblina de los frailejones
+        y vive experiencias inolvidables en la montaña.
+      </p>
+      <div class="hero-btns">
+        <a href="/salidas.html" class="btn btn-primary">🥾 Ver Salidas</a>
+        <a href="/actividades.html" class="btn btn-secondary">📅 Próximas Actividades</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Próximas Salidas Destacadas -->
+  <section class="section">
+    <div class="section-header">
+      <h2>Próximas Salidas</h2>
+      <p>Rutas de trekking programadas para los próximos días</p>
+      <div class="section-divider"></div>
+    </div>
+    <div class="cards-grid" id="salidasContainer">
+      <!-- Las salidas se cargan dinámicamente desde content/salidas/ -->
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop" alt="Laguna Azul" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-salida">Salida</span>
+          <h3>🌊 Laguna Azul</h3>
+          <div class="card-meta">
+            <span>📅 23 Ago 2026</span>
+            <span>⏱️ 4h 30min</span>
+            <span>📏 8.5 km</span>
+          </div>
+          <p>Sendero que atraviesa bosque de frailejones con vista panorámica al valle. Ideal para amanecer.</p>
+          <div class="card-footer">
+            <span class="card-tag tag-moderada">Moderada</span>
+            <a href="/salidas.html" class="btn btn-small btn-secondary">Ver detalles →</a>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop" alt="Cerro Morado" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-salida">Salida</span>
+          <h3>⛰️ Cerro Morado</h3>
+          <div class="card-meta">
+            <span>📅 30 Ago 2026</span>
+            <span>⏱️ 6h</span>
+            <span>📏 12 km</span>
+          </div>
+          <p>Ascenso al mirador más alto de la región. Requiere buena condición física.</p>
+          <div class="card-footer">
+            <span class="card-tag tag-dificil">Difícil</span>
+            <a href="/salidas.html" class="btn btn-small btn-secondary">Ver detalles →</a>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop" alt="Bosque Encantado" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-salida">Salida</span>
+          <h3>🌲 Bosque Encantado</h3>
+          <div class="card-meta">
+            <span>📅 06 Sep 2026</span>
+            <span>⏱️ 3h</span>
+            <span>📏 5 km</span>
+          </div>
+          <p>Caminata suave entre frailejones gigantes y musgo. Perfecta para familias.</p>
+          <div class="card-footer">
+            <span class="card-tag tag-facil">Fácil</span>
+            <a href="/salidas.html" class="btn btn-small btn-secondary">Ver detalles →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Actividades Destacadas -->
+  <section class="section" style="background: rgba(0,0,0,0.15); border-radius: 24px; margin: 0 16px;">
+    <div class="section-header">
+      <h2>Actividades Especiales</h2>
+      <p>Talleres, charlas y experiencias únicas en el camping</p>
+      <div class="section-divider"></div>
+    </div>
+    <div class="cards-grid" id="actividadesContainer">
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&h=400&fit=crop" alt="Yoga" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-actividad">Actividad</span>
+          <h3>🧘 Yoga entre Frailejones</h3>
+          <div class="card-meta">
+            <span>📅 Sábado 16 Ago</span>
+            <span>🕕 06:00 AM</span>
+          </div>
+          <p>Sesión de yoga al amanecer con vista al valle. Incluye mate de coca.</p>
+          <div class="card-footer">
+            <span style="font-size:0.85rem;color:var(--gris-neblina);">💰 Gratis</span>
+            <a href="/actividades.html" class="btn btn-small btn-secondary">Más info →</a>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=600&h=400&fit=crop" alt="Astronomía" class="card-image">
+        <div class="card-body">
+          <span class="card-tag tag-evento">Evento</span>
+          <h3>🔭 Observación Astronómica</h3>
+          <div class="card-meta">
+            <span>📅 Viernes 22 Ago</span>
+            <span>🕗 08:00 PM</span>
+          </div>
+          <p>Noche de estrellas con telescopio. Charla sobre constelaciones del hemisferio sur.</p>
+          <div class="card-footer">
+            <span style="font-size:0.85rem;color:var(--gris-neblina);">💰 $15.000 COP</span>
+            <a href="/actividades.html" class="btn btn-small btn-secondary">Más info →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Instagram Feed -->
+  <section class="section">
+    <div class="section-header">
+      <h2>📸 Síguenos en Instagram</h2>
+      <p>El día a día del camping, en tiempo real</p>
+      <div class="section-divider"></div>
+    </div>
+    <div class="instagram-section">
+      <!-- Aquí va el embed de Instagram -->
+      <div class="instagram-placeholder">
+        <p style="font-size: 1.2rem; margin-bottom: 8px;">🌿 @campingfrailejon</p>
+        <p>
+          Para embeber tu feed de Instagram, ve a<br>
+          <a href="https://www.instagram.com/embed/" target="_blank">instagram.com/embed</a><br>
+          y pega el código aquí. También puedes usar
+          <a href="https://elfsight.com/instagram-feed-widget/" target="_blank">Elfsight</a> (gratis con marca de agua)
+          o <a href="https://snapwidget.com/" target="_blank">SnapWidget</a>.
+        </p>
+        <p style="margin-top: 16px; font-size: 0.85rem; opacity: 0.7;">
+          💡 Mientras tanto, sube fotos con el hashtag <b>#CampingFrailejon</b>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-col">
+        <h4>🏕️ Camping Frailejón</h4>
+        <p>Tu refugio en el páramo. Trekking, camping y experiencias en la montaña.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explorar</h4>
+        <a href="/salidas.html">Salidas</a>
+        <a href="/actividades.html">Actividades</a>
+        <a href="/galeria.html">Galería</a>
+        <a href="/nosotros.html">Nosotros</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contacto</h4>
+        <p>📍 Páramo de Sumapaz, Colombia</p>
+        <p>📱 +57 300 123 4567</p>
+        <p>✉️ hola@campingfrailejon.com</p>
+      </div>
+      <div class="footer-col">
+        <h4>Redes</h4>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">WhatsApp</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Camping Frailejón · Hecho con 🌿 en el páramo</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
