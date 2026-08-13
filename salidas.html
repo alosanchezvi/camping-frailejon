@@ -35,16 +35,7 @@
       <div class="section-divider"></div>
     </div>
 
-    <!-- Mapa -->
-    <div class="map-container" id="mapaSalidas"></div>
 
-    <!-- Filtros -->
-    <div style="display: flex; gap: 10px; justify-content: center; margin: 28px 0; flex-wrap: wrap;">
-      <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('todas')">Todas</button>
-      <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('fácil')">🟢 Fácil</button>
-      <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('moderada')">🟡 Moderada</button>
-      <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('difícil')">🔴 Difícil</button>
-    </div>
 
     <!-- Lista de salidas -->
     <div class="cards-grid" id="salidasLista">
@@ -127,6 +118,18 @@
       </div>
     </div>
   </section>
+
+
+    <!-- Mapa -->
+  <div class="map-container" id="mapaSalidas"></div>
+
+  <!-- Filtros -->
+  <div style="display: flex; gap: 10px; justify-content: center; margin: 28px 0; flex-wrap: wrap;">
+    <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('todas')">Todas</button>
+    <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('fácil')">🟢 Fácil</button>
+    <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('moderada')">🟡 Moderada</button>
+    <button class="btn btn-small btn-secondary" onclick="filtrarSalidas('difícil')">🔴 Difícil</button>
+  </div>
 
   <footer class="footer">
     <div class="footer-content">
