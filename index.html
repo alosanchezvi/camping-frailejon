@@ -23,8 +23,6 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="/" class="active">Inicio</a></li>
         <li><a href="/salidas.html">Salidas</a></li>
-        <li><a href="/actividades.html">Actividades</a></li>
-        <li><a href="/galeria.html">Galería</a></li>
         <li><a href="/nosotros.html">Nosotros</a></li>
       </ul>
       <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
@@ -44,11 +42,10 @@
     <h1>Ruta Frailejón</h1>
     <p class="hero-subtitle">Páramo · Neblina · Aventura</p>
     <p class="hero-desc">
-      El plan es sencillo: deja el pavimento, sube a la montaña,  respira aire frío y disfruta sin afanes.
+      El plan es sencillo: deja el pavimento, sube a la montaña,  respira aire frío y disfruta sin afanes.
     </p>
     <div class="hero-btns">
       <a href="/salidas.html" class="btn btn-primary">🥾 Ver Salidas</a>
-      <a href="/actividades.html" class="btn btn-secondary">📅 Próximas Actividades</a>
     </div>
   </div>
 </header>
@@ -61,7 +58,6 @@
       <div class="section-divider"></div>
     </div>
     <div class="cards-grid" id="salidasContainer">
-      <!-- Las salidas se cargan dinámicamente desde content/salidas/ -->
       <div class="card">
         <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop" alt="Laguna Azul" class="card-image">
         <div class="card-body">
@@ -116,69 +112,23 @@
     </div>
   </section>
 
-  <!-- Actividades Destacadas -->
-  <section class="section" style="background: rgba(0,0,0,0.15); border-radius: 24px; margin: 0 16px;">
-    <div class="section-header">
-      <h2>Actividades Especiales</h2>
-      <p>Talleres, charlas y experiencias únicas en el camping</p>
-      <div class="section-divider"></div>
-    </div>
-    <div class="cards-grid" id="actividadesContainer">
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=600&h=400&fit=crop" alt="Yoga" class="card-image">
-        <div class="card-body">
-          <span class="card-tag tag-actividad">Actividad</span>
-          <h3>🧘 Yoga entre Frailejones</h3>
-          <div class="card-meta">
-            <span>📅 Sábado 16 Ago</span>
-            <span>🕕 06:00 AM</span>
-          </div>
-          <p>Sesión de yoga al amanecer con vista al valle. Incluye mate de coca.</p>
-          <div class="card-footer">
-            <span style="font-size:0.85rem;color:var(--gris-neblina);">💰 Gratis</span>
-            <a href="/actividades.html" class="btn btn-small btn-secondary">Más info →</a>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=600&h=400&fit=crop" alt="Astronomía" class="card-image">
-        <div class="card-body">
-          <span class="card-tag tag-evento">Evento</span>
-          <h3>🔭 Observación Astronómica</h3>
-          <div class="card-meta">
-            <span>📅 Viernes 22 Ago</span>
-            <span>🕗 08:00 PM</span>
-          </div>
-          <p>Noche de estrellas con telescopio. Charla sobre constelaciones del hemisferio sur.</p>
-          <div class="card-footer">
-            <span style="font-size:0.85rem;color:var(--gris-neblina);">💰 $15.000 COP</span>
-            <a href="/actividades.html" class="btn btn-small btn-secondary">Más info →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- Instagram Feed -->
   <section class="section">
     <div class="section-header">
       <h2>📸 Síguenos en Instagram</h2>
-      <p>El día a día del camping, en tiempo real</p>
+      <p>El día a día en la ruta, en tiempo real</p>
       <div class="section-divider"></div>
     </div>
     <div class="instagram-section">
-      <!-- Aquí va el embed de Instagram -->
       <div class="instagram-placeholder">
-        <p style="font-size: 1.2rem; margin-bottom: 8px;">🌿 @campingfrailejon</p>
+        <p style="font-size: 1.2rem; margin-bottom: 8px;">🌿 @RutaFrailejon</p>
         <p>
           Para embeber tu feed de Instagram, ve a<br>
           <a href="https://www.instagram.com/embed/" target="_blank">instagram.com/embed</a><br>
-          y pega el código aquí. También puedes usar
-          <a href="https://elfsight.com/instagram-feed-widget/" target="_blank">Elfsight</a> (gratis con marca de agua)
-          o <a href="https://snapwidget.com/" target="_blank">SnapWidget</a>.
+          y pega el código aquí.
         </p>
         <p style="margin-top: 16px; font-size: 0.85rem; opacity: 0.7;">
-          💡 Mientras tanto, sube fotos con el hashtag <b>#CampingFrailejon</b>
+          💡 Mientras tanto, sube fotos con el hashtag <b>#RutaFrailejon</b>
         </p>
       </div>
     </div>
@@ -188,31 +138,28 @@
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-col">
-        <h4>🏕️ Camping Frailejón</h4>
-        <p>Tu refugio en el páramo. Trekking, camping y experiencias en la montaña.</p>
+        <h4>🏕️ Ruta Frailejón</h4>
+        <p>Tu refugio en el páramo. Trekking, senderismo y experiencias en la montaña.</p>
       </div>
       <div class="footer-col">
         <h4>Explorar</h4>
         <a href="/salidas.html">Salidas</a>
-        <a href="/actividades.html">Actividades</a>
-        <a href="/galeria.html">Galería</a>
         <a href="/nosotros.html">Nosotros</a>
       </div>
       <div class="footer-col">
         <h4>Contacto</h4>
-        <p>📍 Páramo de Sumapaz, Colombia</p>
-        <p>📱 +57 300 123 4567</p>
-        <p>✉️ hola@campingfrailejon.com</p>
+        <p>📍 Café Digno, Zipaquirá</p>
+        <p>📱 +57 3219620590</p>
+        <p>📱 +57 3125459874</p>
+        <p>✉️ hola@rutafrailejon.com</p>
       </div>
       <div class="footer-col">
         <h4>Redes</h4>
-        <a href="#">Instagram</a>
-        <a href="#">Facebook</a>
-        <a href="#">WhatsApp</a>
+        <a href="https://www.instagram.com/RutaFrailejon" target="_blank">Instagram</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Camping Frailejón · Hecho con 🌿 en el páramo</p>
+      <p>© 2026 Ruta Frailejón · Hecho con 🌿 en el páramo</p>
     </div>
   </footer>
 
