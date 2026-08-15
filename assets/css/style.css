@@ -250,8 +250,32 @@ body::before {
 }
 
 .btn-small {
-  padding: 8px 16px;
+  padding: 6px 14px;
   font-size: 0.85rem;
+  border-radius: 6px;
+  min-width: auto;  /* o simplemente quita cualquier width fijo */
+  white-space: nowrap;
+}
+.btn-instagram {
+  background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  color: var(--blanco);
+  border: none;
+}
+
+.btn-instagram:hover {
+  filter: brightness(1.15);
+  transform: translateY(-1px);
+}
+
+.btn-whatsapp {
+  background: #25D366;
+  color: var(--blanco);
+  border: none;
+}
+
+.btn-whatsapp:hover {
+  background: #1ebe57;
+  transform: translateY(-1px);
 }
 
 /* ============================================
@@ -378,12 +402,20 @@ body::before {
 }
 
 .card-footer {
-  margin-top: 16px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(138, 170, 127, 0.1);
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--gris-neblina);
+}
+
+.card-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* ============================================
