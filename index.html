@@ -30,25 +30,25 @@
   </nav>
 
   <!-- Hero -->
-<header class="hero hero-video">
-  <div class="hero-video-container">
-    <video autoplay muted loop playsinline preload="auto" poster="/assets/images/imagen_frailejon_portada.png">
-      <source src="/assets/videos/video_frailejon_portada.webm" type="video/webm">
-    </video>
-    <div class="hero-video-overlay"></div>
-  </div>
-  <div class="hero-content">
-    <div class="hero-icon">🌿</div>
-    <h1>Ruta Frailejón</h1>
-    <p class="hero-subtitle">Páramo · Neblina · Aventura</p>
-    <p class="hero-desc">
-      El plan es sencillo: deja el pavimento, sube a la montaña,  respira aire frío y disfruta sin afanes.
-    </p>
-    <div class="hero-btns">
-      <a href="#salidas" class="btn btn-primary">🥾 Ver Salidas</a>
+  <header class="hero hero-video">
+    <div class="hero-video-container">
+      <video autoplay muted loop playsinline preload="auto" poster="/assets/images/imagen_frailejon_portada.png">
+        <source src="/assets/videos/video_frailejon_portada.webm" type="video/webm">
+      </video>
+      <div class="hero-video-overlay"></div>
     </div>
-  </div>
-</header>
+    <div class="hero-content">
+      <div class="hero-icon">🌿</div>
+      <h1>Ruta Frailejón</h1>
+      <p class="hero-subtitle">Páramo · Neblina · Aventura</p>
+      <p class="hero-desc">
+        El plan es sencillo: deja el pavimento, sube a la montaña, respira aire frío y disfruta sin afanes.
+      </p>
+      <div class="hero-btns">
+        <a href="#salidas" class="btn btn-primary">🥾 Ver Salidas</a>
+      </div>
+    </div>
+  </header>
 
   <!-- Próximas Salidas Destacadas -->
   <section class="section" id="salidas">
@@ -58,6 +58,8 @@
       <div class="section-divider"></div>
     </div>
     <div class="cards-grid" id="salidasContainer">
+      
+      <!-- Card 1: Laguna Azul -->
       <div class="card">
         <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop" alt="Laguna Azul" class="card-image">
         <div class="card-body">
@@ -71,13 +73,12 @@
           <p>Sendero que atraviesa bosque de frailejones con vista panorámica al valle. Ideal para amanecer.</p>
           <div class="card-footer">
             <span class="card-tag tag-moderada">Moderada</span>
-            <div class="card-actions">
-              <a href="https://www.instagram.com/RutaFrailejon" target="_blank" class="btn btn-small btn-instagram">📸 Instagram</a>
-              <a href="https://wa.me/573219620590?text=Hola%20Ruta%20Frailejón%2C%20quiero%20más%20info%20sobre%20la%20salida%20a%20Laguna%20Azul%20%F0%9F%8C%8A" target="_blank" class="btn btn-small btn-whatsapp">💬 WhatsApp</a>
-            </div>
+            <button class="btn btn-small btn-secondary" onclick="openModal('Laguna Azul', '573219620590')">Ver detalles →</button>
           </div>
         </div>
       </div>
+
+      <!-- Card 2: Cerro Morado -->
       <div class="card">
         <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop" alt="Cerro Morado" class="card-image">
         <div class="card-body">
@@ -91,13 +92,12 @@
           <p>Ascenso al mirador más alto de la región. Requiere buena condición física.</p>
           <div class="card-footer">
             <span class="card-tag tag-dificil">Difícil</span>
-            <div class="card-actions">
-              <a href="https://www.instagram.com/RutaFrailejon" target="_blank" class="btn btn-small btn-instagram">📸 Instagram</a>
-              <a href="https://wa.me/573125459874?text=Hola%20Ruta%20Frailejón%2C%20quiero%20más%20info%20sobre%20la%20salida%20a%20Cerro%20Morado%20%E2%9B%B0%EF%B8%8F" target="_blank" class="btn btn-small btn-whatsapp">💬 WhatsApp</a>
-            </div>
+            <button class="btn btn-small btn-secondary" onclick="openModal('Cerro Morado', '573125459874')">Ver detalles →</button>
           </div>
         </div>
       </div>
+
+      <!-- Card 3: Bosque Encantado -->
       <div class="card">
         <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop" alt="Bosque Encantado" class="card-image">
         <div class="card-body">
@@ -111,13 +111,11 @@
           <p>Caminata suave entre frailejones gigantes y musgo. Perfecta para familias.</p>
           <div class="card-footer">
             <span class="card-tag tag-facil">Fácil</span>
-            <div class="card-actions">
-              <a href="https://www.instagram.com/RutaFrailejón" target="_blank" class="btn btn-small btn-instagram">📸 Instagram</a>
-              <a href="https://wa.me/573219620590?text=Hola%20Ruta%20Frailejón%2C%20quiero%20más%20info%20sobre%20la%20salida%20al%20Bosque%20Encantado%20%F0%9F%8C%B2" target="_blank" class="btn btn-small btn-whatsapp">💬 WhatsApp</a>
-            </div>
+            <button class="btn btn-small btn-secondary" onclick="openModal('Bosque Encantado', '573219620590')">Ver detalles →</button>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 
@@ -172,6 +170,55 @@
     </div>
   </footer>
 
+  <!-- Modal de Detalles -->
+  <div id="detalleModal" class="modal-overlay">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-icon">🥾</div>
+      <h3 id="modalTitulo" class="modal-titulo"></h3>
+      <p class="modal-subtitulo">¿Cómo quieres conocer más de esta salida?</p>
+      
+      <div class="modal-botones">
+        <a id="modalInstagram" href="#" target="_blank" class="btn-modal btn-instagram">
+          📸 Ver en Instagram
+        </a>
+        <a id="modalWhatsapp" href="#" target="_blank" class="btn-modal btn-whatsapp">
+          💬 Escribir por WhatsApp
+        </a>
+      </div>
+      
+      <p class="modal-nota">Se abrirá en una nueva pestaña</p>
+    </div>
+  </div>
+
   <script src="/assets/js/main.js"></script>
+  <script>
+    function openModal(ruta, telefono) {
+      const mensajes = {
+        'Laguna Azul': 'Hola Ruta Frailejón, quiero más info sobre la salida a Laguna Azul 🌊',
+        'Cerro Morado': 'Hola Ruta Frailejón, quiero más info sobre la salida a Cerro Morado ⛰️',
+        'Bosque Encantado': 'Hola Ruta Frailejón, quiero más info sobre la salida al Bosque Encantado 🌲'
+      };
+      
+      document.getElementById('modalTitulo').textContent = ruta;
+      document.getElementById('modalInstagram').href = 'https://www.instagram.com/RutaFrailejon';
+      document.getElementById('modalWhatsapp').href = 'https://wa.me/' + telefono + '?text=' + encodeURIComponent(mensajes[ruta]);
+      document.getElementById('detalleModal').classList.add('activo');
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeModal() {
+      document.getElementById('detalleModal').classList.remove('activo');
+      document.body.style.overflow = '';
+    }
+    
+    document.getElementById('detalleModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+    
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
 </body>
 </html>
