@@ -62,11 +62,13 @@
       color: #E1306C;
     }
 
-    /* Toggle de idioma */
+    /* ==========================================
+       TOGGLE DE IDIOMA
+       ========================================== */
     .lang-toggle {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       background: rgba(143, 170, 127, 0.15);
       border: 1px solid #8faa7f;
       border-radius: 20px;
@@ -77,39 +79,128 @@
       color: #8faa7f;
       transition: all 0.3s ease;
       margin-left: 12px;
+      flex-shrink: 0;
     }
     .lang-toggle:hover {
       background: rgba(143, 170, 127, 0.3);
     }
     .lang-toggle span {
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 12px;
       transition: all 0.3s ease;
+      line-height: 1.4;
     }
     .lang-toggle .active-lang {
       background: #8faa7f;
       color: #fff;
       font-weight: 600;
     }
+
+    /* ==========================================
+       NAVEGACIÓN
+       ========================================== */
     .nav-links {
       display: flex;
       align-items: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 2px;
+    }
+    .nav-links li {
+      display: flex;
+      align-items: center;
+    }
+    .nav-links li a {
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+      white-space: nowrap;
     }
 
-    /* Ajuste para móviles */
+    /* ==========================================
+       MENÚ MÓVIL — compatible con main.js
+       ========================================== */
     @media (max-width: 768px) {
+      .nav-container {
+        position: relative;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(18, 28, 18, 0.98);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 20px 20px;
+        gap: 2px;
+        border-top: 1px solid rgba(143, 170, 127, 0.15);
+        transform: translateY(-10px);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        z-index: 999;
+        display: flex !important;
+      }
+
+      .nav-links.activo,
+      .nav-links.open,
+      .nav-links.show {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-links li {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .nav-links li a {
+        display: block;
+        width: 100%;
+        padding: 14px 16px;
+        text-align: center;
+        font-size: 1.1rem;
+      }
+
+      .nav-links li a.active {
+        background: rgba(143, 170, 127, 0.15);
+      }
+
+      /* Toggle de idioma en móvil */
+      .lang-toggle-li {
+        justify-content: center;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(143, 170, 127, 0.1);
+      }
+
+      .lang-toggle {
+        margin-left: 0;
+        font-size: 1rem;
+        padding: 6px 12px;
+        gap: 6px;
+      }
+
+      .lang-toggle span {
+        padding: 4px 10px;
+        border-radius: 14px;
+      }
+
+      /* About grid en móvil */
       .about-grid {
         grid-template-columns: 1fr;
       }
       .about-image {
         height: 300px;
       }
-      .lang-toggle {
-        margin-left: 0;
-        margin-top: 8px;
-      }
     }
   </style>
+<base target="_blank">
 <base target="_blank">
 </head>
 <body>
@@ -126,7 +217,7 @@
         <li><a href="/" target="_self" data-i18n="nav_inicio">Inicio</a></li>
         <li><a href="/#salidas" target="_self" data-i18n="nav_salidas">Salidas</a></li>
         <li><a href="/nosotros.html" class="active" target="_self" data-i18n="nav_nosotros">Nosotros</a></li>
-        <li>
+        <li class="lang-toggle-li">
           <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()" aria-label="Cambiar idioma">
             <span id="langEs" class="active-lang">ES</span>
             <span>/</span>
@@ -134,7 +225,7 @@
           </button>
         </li>
       </ul>
-      <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
+      <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Abrir menú">☰</button>
     </div>
   </nav>
 
@@ -345,6 +436,29 @@
         }
       });
     });
+  </script>
+
+  <!-- Redefinir toggleMenu() para menú móvil -->
+  <script>
+    (function() {
+      var navLinks = document.getElementById('navLinks');
+
+      window.toggleMenu = function() {
+        if (navLinks) {
+          navLinks.classList.toggle('activo');
+        }
+      };
+
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.nav-links a').forEach(function(link) {
+          link.addEventListener('click', function() {
+            if (window.innerWidth <= 768 && navLinks) {
+              navLinks.classList.remove('activo');
+            }
+          });
+        });
+      });
+    })();
   </script>
 </body>
 </html>
