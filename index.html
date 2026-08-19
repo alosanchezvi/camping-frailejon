@@ -3,11 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ruta Frailejón — Páramo, Neblina y Aventura</title>
-  <meta name="description" content="salidas de trekking, actividades al aire libre y experiencias en la naturaleza">
+  <title data-i18n="title">Ruta Frailejón — Páramo, Neblina y Aventura</title>
+  <meta name="description" data-i18n="meta_desc" content="salidas de trekking, actividades al aire libre y experiencias en la naturaleza">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="icon" type="image/svg+xml" href="/assets/icons/frailejon-icon.svg">
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <style>
+    /* Estilos para el toggle de idioma */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(143, 170, 127, 0.15);
+      border: 1px solid #8faa7f;
+      border-radius: 20px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      color: #8faa7f;
+      transition: all 0.3s ease;
+      margin-left: 12px;
+    }
+    .lang-toggle:hover {
+      background: rgba(143, 170, 127, 0.3);
+    }
+    .lang-toggle span {
+      padding: 2px 6px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    .lang-toggle .active-lang {
+      background: #8faa7f;
+      color: #fff;
+      font-weight: 600;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+    @media (max-width: 768px) {
+      .lang-toggle {
+        margin-left: 0;
+        margin-top: 8px;
+      }
+    }
+  </style>
+<base target="_blank">
 </head>
 <body>
   <!-- Navegación -->
@@ -21,11 +63,16 @@
         Ruta Frailejón
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/" class="active">Inicio</a></li>
-        <li><a href="#salidas">Salidas</a></li>
-        <li><a href="/nosotros.html">Nosotros</a></li>
-        <!-- Opción de cambio de idioma -->
-        <li><a href="/en/" class="lang-btn">EN 🇬🇧</a></li>
+        <li><a href="/" class="active" data-i18n="nav_inicio">Inicio</a></li>
+        <li><a href="#salidas" data-i18n="nav_salidas">Salidas</a></li>
+        <li><a href="/nosotros.html" data-i18n="nav_nosotros">Nosotros</a></li>
+        <li>
+          <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()" aria-label="Cambiar idioma">
+            <span id="langEs" class="active-lang">ES</span>
+            <span>/</span>
+            <span id="langEn">EN</span>
+          </button>
+        </li>
       </ul>
       <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
     </div>
@@ -42,12 +89,12 @@
     <div class="hero-content">
       <div class="hero-icon">🌿</div>
       <h1>Ruta Frailejón</h1>
-      <p class="hero-subtitle">Páramo · Neblina · Aventura</p>
-      <p class="hero-desc">
+      <p class="hero-subtitle" data-i18n="hero_subtitle">Páramo · Neblina · Aventura</p>
+      <p class="hero-desc" data-i18n="hero_desc">
         El plan es sencillo: deja el pavimento, sube a la montaña, respira aire frío y disfruta sin afanes.
       </p>
       <div class="hero-btns">
-        <a href="#salidas" class="btn btn-primary">🥾 Ver Salidas</a>
+        <a href="#salidas" class="btn btn-primary" data-i18n="btn_ver_salidas">🥾 Ver Salidas</a>
       </div>
     </div>
   </header>
@@ -55,27 +102,27 @@
   <!-- Próximas Salidas Destacadas -->
   <section class="section" id="salidas">
     <div class="section-header">
-      <h2>Próximas Salidas</h2>
-      <p>Rutas de trekking programadas para los próximos días</p>
+      <h2 data-i18n="titulo_salidas">Próximas Salidas</h2>
+      <p data-i18n="desc_salidas">Rutas de trekking programadas para los próximos días</p>
       <div class="section-divider"></div>
     </div>
     <div class="cards-grid" id="salidasContainer">
-      
+
       <!-- Card 1: Laguna Azul -->
       <div class="card">
         <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=400&fit=crop" alt="Laguna Azul" class="card-image">
         <div class="card-body">
-          <span class="card-tag tag-salida">Salida</span>
-          <h3>🌊 Laguna Azul</h3>
+          <span class="card-tag tag-salida" data-i18n="tag_salida">Salida</span>
+          <h3>🌊 <span data-i18n="ruta_laguna">Laguna Azul</span></h3>
           <div class="card-meta">
-            <span>📅 23 Ago 2026</span>
+            <span>📅 <span data-i18n="fecha_laguna">23 Ago 2026</span></span>
             <span>⏱️ 4h 30min</span>
             <span>📏 8.5 km</span>
           </div>
-          <p>Sendero que atraviesa bosque de frailejones con vista panorámica al valle. Ideal para amanecer.</p>
+          <p data-i18n="desc_laguna">Sendero que atraviesa bosque de frailejones con vista panorámica al valle. Ideal para amanecer.</p>
           <div class="card-footer">
-            <span class="card-tag tag-moderada">Moderada</span>
-            <button class="btn btn-small btn-secondary" onclick="openModal('Laguna Azul', '573219620590')">Ver detalles →</button>
+            <span class="card-tag tag-moderada" data-i18n="tag_moderada">Moderada</span>
+            <button class="btn btn-small btn-secondary" onclick="openModal('Laguna Azul', '573219620590')" data-i18n="btn_detalles">Ver detalles →</button>
           </div>
         </div>
       </div>
@@ -84,17 +131,17 @@
       <div class="card">
         <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=400&fit=crop" alt="Cerro Morado" class="card-image">
         <div class="card-body">
-          <span class="card-tag tag-salida">Salida</span>
-          <h3>⛰️ Cerro Morado</h3>
+          <span class="card-tag tag-salida" data-i18n="tag_salida">Salida</span>
+          <h3>⛰️ <span data-i18n="ruta_cerro">Cerro Morado</span></h3>
           <div class="card-meta">
-            <span>📅 30 Ago 2026</span>
+            <span>📅 <span data-i18n="fecha_cerro">30 Ago 2026</span></span>
             <span>⏱️ 6h</span>
             <span>📏 12 km</span>
           </div>
-          <p>Ascenso al mirador más alto de la región. Requiere buena condición física.</p>
+          <p data-i18n="desc_cerro">Ascenso al mirador más alto de la región. Requiere buena condición física.</p>
           <div class="card-footer">
-            <span class="card-tag tag-dificil">Difícil</span>
-            <button class="btn btn-small btn-secondary" onclick="openModal('Cerro Morado', '573125459874')">Ver detalles →</button>
+            <span class="card-tag tag-dificil" data-i18n="tag_dificil">Difícil</span>
+            <button class="btn btn-small btn-secondary" onclick="openModal('Cerro Morado', '573125459874')" data-i18n="btn_detalles">Ver detalles →</button>
           </div>
         </div>
       </div>
@@ -103,17 +150,17 @@
       <div class="card">
         <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop" alt="Bosque Encantado" class="card-image">
         <div class="card-body">
-          <span class="card-tag tag-salida">Salida</span>
-          <h3>🌲 Bosque Encantado</h3>
+          <span class="card-tag tag-salida" data-i18n="tag_salida">Salida</span>
+          <h3>🌲 <span data-i18n="ruta_bosque">Bosque Encantado</span></h3>
           <div class="card-meta">
-            <span>📅 06 Sep 2026</span>
+            <span>📅 <span data-i18n="fecha_bosque">06 Sep 2026</span></span>
             <span>⏱️ 3h</span>
             <span>📏 5 km</span>
           </div>
-          <p>Caminata suave entre frailejones gigantes y musgo. Perfecta para familias.</p>
+          <p data-i18n="desc_bosque">Caminata suave entre frailejones gigantes y musgo. Perfecta para familias.</p>
           <div class="card-footer">
-            <span class="card-tag tag-facil">Fácil</span>
-            <button class="btn btn-small btn-secondary" onclick="openModal('Bosque Encantado', '573219620590')">Ver detalles →</button>
+            <span class="card-tag tag-facil" data-i18n="tag_facil">Fácil</span>
+            <button class="btn btn-small btn-secondary" onclick="openModal('Bosque Encantado', '573219620590')" data-i18n="btn_detalles">Ver detalles →</button>
           </div>
         </div>
       </div>
@@ -124,21 +171,20 @@
   <!-- Instagram Feed -->
   <section class="section">
     <div class="section-header">
-      <h2>📸 Síguenos en Instagram</h2>
-      <p>El día a día en la ruta, en tiempo real</p>
+      <h2 data-i18n="titulo_instagram">📸 Síguenos en Instagram</h2>
+      <p data-i18n="desc_instagram">El día a día en la ruta, en tiempo real</p>
       <div class="section-divider"></div>
     </div>
     <div class="instagram-section">
       <div class="instagram-placeholder">
-        <p style="font-size: 1.2rem; margin-bottom: 8px;">
-          <a href="https://www.instagram.com/rutafrailejon/" target="_blank" style="text-decoration: none; color: inherit;">🌿 @rutafrailejon</a>
+        <p style="font-size: 1.2rem; margin-bottom: 8px;">🌿 @RutaFrailejon</p>
+        <p data-i18n="embed_instagram">
+          Para embeber tu feed de Instagram, ve a<br>
+          <a href="https://www.instagram.com/embed/" target="_blank">instagram.com/embed</a><br>
+          y pega el código aquí.
         </p>
-        <p>
-          Visita nuestro perfil oficial para ver nuestras últimas aventuras:<br>
-          <a href="https://www.instagram.com/rutafrailejon/" target="_blank">instagram.com/rutafrailejon</a>
-        </p>
-        <p style="margin-top: 16px; font-size: 0.85rem; opacity: 0.7;">
-          💡 Sube tus fotos con el hashtag <b>#RutaFrailejón</b>
+        <p style="margin-top: 16px; font-size: 0.85rem; opacity: 0.7;" data-i18n="hint_instagram">
+          💡 Mientras tanto, sube fotos con el hashtag <b>#RutaFrailejón</b>
         </p>
       </div>
     </div>
@@ -149,28 +195,27 @@
     <div class="footer-content">
       <div class="footer-col">
         <h4>🏕️ Ruta Frailejón</h4>
-        <!-- Descripción actualizada según instrucciones -->
-        <p>Senderismo y experiencias en la montaña.</p>
+        <p data-i18n="footer_desc">Tu refugio en el páramo. Trekking, senderismo y experiencias en la montaña.</p>
       </div>
       <div class="footer-col">
-        <h4>Explorar</h4>
-        <a href="#salidas">Salidas</a>
-        <a href="/nosotros.html">Nosotros</a>
+        <h4 data-i18n="footer_explorar">Explorar</h4>
+        <a href="#salidas" data-i18n="nav_salidas">Salidas</a>
+        <a href="/nosotros.html" data-i18n="nav_nosotros">Nosotros</a>
       </div>
       <div class="footer-col">
-        <h4>Contacto</h4>
-        <!-- Eliminada la ubicación de Café Digno y solo se dejaron números de celular -->
+        <h4 data-i18n="footer_contacto">Contacto</h4>
+        <p>📍 Café Digno, Zipaquirá</p>
         <p>📱 +57 3219620590</p>
         <p>📱 +57 3125459874</p>
+        <p>✉️ hola@rutafrailejon.com</p>
       </div>
       <div class="footer-col">
-        <h4>Redes</h4>
-        <!-- Enlace asociado correctamente -->
-        <a href="https://www.instagram.com/rutafrailejon/" target="_blank">Instagram</a>
+        <h4 data-i18n="footer_redes">Redes</h4>
+        <a href="https://www.instagram.com/RutaFrailejon" target="_blank">Instagram</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Ruta Frailejón · Hecho con 🌿 en el páramo</p>
+      <p data-i18n="footer_copy">© 2026 Ruta Frailejón · Hecho con 🌿 en un país de alturas</p>
     </div>
   </footer>
 
@@ -180,47 +225,192 @@
       <button class="modal-close" onclick="closeModal()">✕</button>
       <div class="modal-icon">🥾</div>
       <h3 id="modalTitulo" class="modal-titulo"></h3>
-      <p class="modal-subtitulo">¿Cómo quieres conocer más de esta salida?</p>
-      
+      <p class="modal-subtitulo" data-i18n="modal_subtitulo">¿Cómo quieres conocer más de esta salida?</p>
+
       <div class="modal-botones">
-        <a id="modalInstagram" href="#" target="_blank" class="btn-modal btn-instagram">
+        <a id="modalInstagram" href="#" target="_blank" class="btn-modal btn-instagram" data-i18n="btn_instagram">
           📸 Ver en Instagram
         </a>
-        <a id="modalWhatsapp" href="#" target="_blank" class="btn-modal btn-whatsapp">
+        <a id="modalWhatsapp" href="#" target="_blank" class="btn-modal btn-whatsapp" data-i18n="btn_whatsapp">
           💬 Escribir por WhatsApp
         </a>
       </div>
-      
-      <p class="modal-nota">Se abrirá en una nueva pestaña</p>
+
+      <p class="modal-nota" data-i18n="modal_nota">Se abrirá en una nueva pestaña</p>
     </div>
   </div>
 
   <script src="/assets/js/main.js"></script>
   <script>
+    // ==========================================
+    // SISTEMA DE TRADUCCIÓN BILINGÜE
+    // ==========================================
+    const translations = {
+      es: {
+        title: "Ruta Frailejón — Páramo, Neblina y Aventura",
+        meta_desc: "salidas de trekking, actividades al aire libre y experiencias en la naturaleza",
+        nav_inicio: "Inicio",
+        nav_salidas: "Salidas",
+        nav_nosotros: "Nosotros",
+        hero_subtitle: "Páramo · Neblina · Aventura",
+        hero_desc: "El plan es sencillo: deja el pavimento, sube a la montaña, respira aire frío y disfruta sin afanes.",
+        btn_ver_salidas: "🥾 Ver Salidas",
+        titulo_salidas: "Próximas Salidas",
+        desc_salidas: "Rutas de trekking programadas para los próximos días",
+        tag_salida: "Salida",
+        ruta_laguna: "Laguna Azul",
+        fecha_laguna: "23 Ago 2026",
+        desc_laguna: "Sendero que atraviesa bosque de frailejones con vista panorámica al valle. Ideal para amanecer.",
+        tag_moderada: "Moderada",
+        btn_detalles: "Ver detalles →",
+        ruta_cerro: "Cerro Morado",
+        fecha_cerro: "30 Ago 2026",
+        desc_cerro: "Ascenso al mirador más alto de la región. Requiere buena condición física.",
+        tag_dificil: "Difícil",
+        ruta_bosque: "Bosque Encantado",
+        fecha_bosque: "06 Sep 2026",
+        desc_bosque: "Caminata suave entre frailejones gigantes y musgo. Perfecta para familias.",
+        tag_facil: "Fácil",
+        titulo_instagram: "📸 Síguenos en Instagram",
+        desc_instagram: "El día a día en la ruta, en tiempo real",
+        embed_instagram: 'Para embeber tu feed de Instagram, ve a<br><a href="https://www.instagram.com/embed/" target="_blank">instagram.com/embed</a><br>y pega el código aquí.',
+        hint_instagram: '💡 Mientras tanto, sube fotos con el hashtag <b>#RutaFrailejón</b>',
+        footer_desc: "Tu refugio en el páramo. Trekking, senderismo y experiencias en la montaña.",
+        footer_explorar: "Explorar",
+        footer_contacto: "Contacto",
+        footer_redes: "Redes",
+        footer_copy: "© 2026 Ruta Frailejón · Hecho con 🌿 en un país de alturas",
+        modal_subtitulo: "¿Cómo quieres conocer más de esta salida?",
+        btn_instagram: "📸 Ver en Instagram",
+        btn_whatsapp: "💬 Escribir por WhatsApp",
+        modal_nota: "Se abrirá en una nueva pestaña",
+        msg_laguna: "Hola Ruta Frailejón, quiero más info sobre la salida a Laguna Azul 🌊",
+        msg_cerro: "Hola Ruta Frailejón, quiero más info sobre la salida a Cerro Morado ⛰️",
+        msg_bosque: "Hola Ruta Frailejón, quiero más info sobre la salida al Bosque Encantado 🌲"
+      },
+      en: {
+        title: "Ruta Frailejón — Moor, Mist & Adventure",
+        meta_desc: "trekking outings, outdoor activities and nature experiences",
+        nav_inicio: "Home",
+        nav_salidas: "Outings",
+        nav_nosotros: "About Us",
+        hero_subtitle: "Moor · Mist · Adventure",
+        hero_desc: "The plan is simple: leave the pavement, climb the mountain, breathe cold air and enjoy without rush.",
+        btn_ver_salidas: "🥾 See Outings",
+        titulo_salidas: "Upcoming Outings",
+        desc_salidas: "Scheduled trekking routes for the coming days",
+        tag_salida: "Outing",
+        ruta_laguna: "Blue Lagoon",
+        fecha_laguna: "Aug 23, 2026",
+        desc_laguna: "Trail through frailejón forest with panoramic valley views. Ideal for sunrise.",
+        tag_moderada: "Moderate",
+        btn_detalles: "See details →",
+        ruta_cerro: "Purple Hill",
+        fecha_cerro: "Aug 30, 2026",
+        desc_cerro: "Ascent to the region's highest viewpoint. Requires good physical condition.",
+        tag_dificil: "Difficult",
+        ruta_bosque: "Enchanted Forest",
+        fecha_bosque: "Sep 06, 2026",
+        desc_bosque: "Gentle walk among giant frailejones and moss. Perfect for families.",
+        tag_facil: "Easy",
+        titulo_instagram: "📸 Follow us on Instagram",
+        desc_instagram: "Day-to-day on the trail, in real time",
+        embed_instagram: 'To embed your Instagram feed, go to<br><a href="https://www.instagram.com/embed/" target="_blank">instagram.com/embed</a><br>and paste the code here.',
+        hint_instagram: '💡 In the meantime, upload photos with the hashtag <b>#RutaFrailejón</b>',
+        footer_desc: "Your refuge in the moor. Trekking, hiking and mountain experiences.",
+        footer_explorar: "Explore",
+        footer_contacto: "Contact",
+        footer_redes: "Social",
+        footer_copy: "© 2026 Ruta Frailejón · Made with 🌿 in a country of heights",
+        modal_subtitulo: "How would you like to learn more about this outing?",
+        btn_instagram: "📸 View on Instagram",
+        btn_whatsapp: "💬 Message on WhatsApp",
+        modal_nota: "Will open in a new tab",
+        msg_laguna: "Hello Ruta Frailejón, I want more info about the Blue Lagoon outing 🌊",
+        msg_cerro: "Hello Ruta Frailejón, I want more info about the Purple Hill outing ⛰️",
+        msg_bosque: "Hello Ruta Frailejón, I want more info about the Enchanted Forest outing 🌲"
+      }
+    };
+
+    let currentLang = localStorage.getItem('rf_lang') || 'es';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('rf_lang', lang);
+      document.documentElement.lang = lang;
+
+      // Actualizar todos los elementos con data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          if (key === 'title') {
+            el.textContent = translations[lang][key];
+          } else if (key === 'meta_desc') {
+            el.setAttribute('content', translations[lang][key]);
+          } else if (key === 'embed_instagram' || key === 'hint_instagram') {
+            el.innerHTML = translations[lang][key];
+          } else {
+            el.textContent = translations[lang][key];
+          }
+        }
+      });
+
+      // Actualizar indicadores visuales del toggle
+      const esSpan = document.getElementById('langEs');
+      const enSpan = document.getElementById('langEn');
+      if (lang === 'es') {
+        esSpan.classList.add('active-lang');
+        enSpan.classList.remove('active-lang');
+      } else {
+        enSpan.classList.add('active-lang');
+        esSpan.classList.remove('active-lang');
+      }
+    }
+
+    function toggleLanguage() {
+      const newLang = currentLang === 'es' ? 'en' : 'es';
+      setLanguage(newLang);
+    }
+
+    // Inicializar idioma al cargar
+    document.addEventListener('DOMContentLoaded', () => {
+      setLanguage(currentLang);
+    });
+
+    // ==========================================
+    // MODAL (actualizado para usar traducciones)
+    // ==========================================
     function openModal(ruta, telefono) {
+      const t = translations[currentLang];
       const mensajes = {
-        'Laguna Azul': 'Hola Ruta Frailejón, quiero más info sobre la salida a Laguna Azul 🌊',
-        'Cerro Morado': 'Hola Ruta Frailejón, quiero más info sobre la salida a Cerro Morado ⛰️',
-        'Bosque Encantado': 'Hola Ruta Frailejón, quiero más info sobre la salida al Bosque Encantado 🌲'
+        'Laguna Azul': t.msg_laguna,
+        'Cerro Morado': t.msg_cerro,
+        'Bosque Encantado': t.msg_bosque
       };
-      
-      document.getElementById('modalTitulo').textContent = ruta;
-      // Enlace de Instagram actualizado en el modal
-      document.getElementById('modalInstagram').href = 'https://www.instagram.com/rutafrailejon/';
+
+      // Mostrar nombre traducido en el modal
+      const nombresTraducidos = {
+        'Laguna Azul': t.ruta_laguna,
+        'Cerro Morado': t.ruta_cerro,
+        'Bosque Encantado': t.ruta_bosque
+      };
+
+      document.getElementById('modalTitulo').textContent = nombresTraducidos[ruta] || ruta;
+      document.getElementById('modalInstagram').href = 'https://www.instagram.com/RutaFrailejon';
       document.getElementById('modalWhatsapp').href = 'https://wa.me/' + telefono + '?text=' + encodeURIComponent(mensajes[ruta]);
       document.getElementById('detalleModal').classList.add('activo');
       document.body.style.overflow = 'hidden';
     }
-    
+
     function closeModal() {
       document.getElementById('detalleModal').classList.remove('activo');
       document.body.style.overflow = '';
     }
-    
+
     document.getElementById('detalleModal').addEventListener('click', function(e) {
       if (e.target === this) closeModal();
     });
-    
+
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') closeModal();
     });
