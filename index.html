@@ -10,7 +10,7 @@
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
     /* ==========================================
-       TOGGLE DE IDIOMA — DISEÑO RESPONSIVE
+       TOGGLE DE IDIOMA
        ========================================== */
     .lang-toggle {
       display: flex;
@@ -25,7 +25,7 @@
       font-size: 0.85rem;
       color: #8faa7f;
       transition: all 0.3s ease;
-      margin-left: 16px;
+      margin-left: 12px;
       flex-shrink: 0;
     }
     .lang-toggle:hover {
@@ -44,7 +44,7 @@
     }
 
     /* ==========================================
-       NAVEGACIÓN — ESTRUCTURA RESPONSIVE
+       NAVEGACIÓN
        ========================================== */
     .nav-links {
       display: flex;
@@ -52,7 +52,7 @@
       list-style: none;
       margin: 0;
       padding: 0;
-      gap: 4px;
+      gap: 2px;
     }
     .nav-links li {
       display: flex;
@@ -62,10 +62,11 @@
       padding: 8px 14px;
       border-radius: 8px;
       transition: background 0.2s ease;
+      white-space: nowrap;
     }
 
     /* ==========================================
-       MENÚ MÓVIL
+       MENÚ MÓVIL — compatible con main.js
        ========================================== */
     @media (max-width: 768px) {
       .nav-container {
@@ -82,16 +83,19 @@
         flex-direction: column;
         align-items: stretch;
         padding: 12px 20px 20px;
-        gap: 4px;
+        gap: 2px;
         border-top: 1px solid rgba(143, 170, 127, 0.15);
         transform: translateY(-10px);
         opacity: 0;
         pointer-events: none;
         transition: all 0.3s ease;
         z-index: 999;
+        display: flex !important; /* si main.js usa display:none/block */
       }
 
-      .nav-links.activo {
+      .nav-links.activo,
+      .nav-links.open,
+      .nav-links.show {
         transform: translateY(0);
         opacity: 1;
         pointer-events: auto;
@@ -99,25 +103,24 @@
 
       .nav-links li {
         width: 100%;
+        justify-content: center;
       }
 
       .nav-links li a {
         display: block;
         width: 100%;
-        padding: 12px 16px;
+        padding: 14px 16px;
         text-align: center;
-        font-size: 1.05rem;
+        font-size: 1.1rem;
       }
 
       .nav-links li a.active {
         background: rgba(143, 170, 127, 0.15);
       }
 
-      /* Toggle de idioma en móvil: centrado y más grande */
-      .lang-toggle-wrapper {
-        display: flex;
+      /* Toggle de idioma en móvil */
+      .lang-toggle-li {
         justify-content: center;
-        width: 100%;
         margin-top: 8px;
         padding-top: 8px;
         border-top: 1px solid rgba(143, 170, 127, 0.1);
@@ -150,21 +153,18 @@
         </svg>
         Ruta Frailejón
       </a>
-
-      <!-- Menú de navegación + toggle -->
-      <div class="nav-links" id="navLinks">
-        <a href="/" class="active" data-i18n="nav_inicio" target="_self">Inicio</a>
-        <a href="#salidas" data-i18n="nav_salidas" target="_self">Salidas</a>
-        <a href="/nosotros.html" data-i18n="nav_nosotros" target="_self">Nosotros</a>
-        <div class="lang-toggle-wrapper">
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/" class="active" data-i18n="nav_inicio" target="_self">Inicio</a></li>
+        <li><a href="#salidas" data-i18n="nav_salidas" target="_self">Salidas</a></li>
+        <li><a href="/nosotros.html" data-i18n="nav_nosotros" target="_self">Nosotros</a></li>
+        <li class="lang-toggle-li">
           <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()" aria-label="Cambiar idioma">
             <span id="langEs" class="active-lang">ES</span>
             <span>/</span>
             <span id="langEn">EN</span>
           </button>
-        </div>
-      </div>
-
+        </li>
+      </ul>
       <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Abrir menú">☰</button>
     </div>
   </nav>
@@ -511,24 +511,38 @@
     });
   </script>
 
-  <!-- Corrección: evitar que main.js abra links internos en nueva pestaña -->
+  <!-- Redefinir toggleMenu() para que funcione con nuestro menú -->
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Forzar que todos los links internos se abran en la misma pestaña
-      document.querySelectorAll('a').forEach(function(link) {
-        var href = link.getAttribute('href') || '';
-        // Solo links internos (no empiezan con http y no tienen target="_blank")
-        if (!href.startsWith('http') && link.getAttribute('target') !== '_blank') {
-          link.setAttribute('target', '_self');
-          link.addEventListener('click', function(e) {
-            // Si main.js intenta abrir en nueva ventana, lo prevenimos
-            // y navegamos normalmente
-            if (e.ctrlKey || e.metaKey || e.shiftKey) return; // Permitir clicks con teclas modificadoras
-            // Navegación normal, no hacemos nada especial
-          });
+    (function() {
+      // Guardar referencia al menú
+      var navLinks = document.getElementById('navLinks');
+
+      // Redefinir toggleMenu global para que use nuestra clase .activo
+      window.toggleMenu = function() {
+        if (navLinks) {
+          navLinks.classList.toggle('activo');
         }
+      };
+
+      // Cerrar menú al hacer click en un link (móvil)
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.nav-links a').forEach(function(link) {
+          link.addEventListener('click', function() {
+            if (window.innerWidth <= 768 && navLinks) {
+              navLinks.classList.remove('activo');
+            }
+          });
+        });
+
+        // Forzar links internos a abrir en misma pestaña
+        document.querySelectorAll('a').forEach(function(link) {
+          var href = link.getAttribute('href') || '';
+          if (!href.startsWith('http') && link.getAttribute('target') !== '_blank') {
+            link.setAttribute('target', '_self');
+          }
+        });
       });
-    });
+    })();
   </script>
 </body>
 </html>
