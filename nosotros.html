@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nosotros — Ruta Frailejón</title>
-  <meta name="description" content="Conoce Ruta Frailejón. Nuestra historia y valores.">
+  <title data-i18n="title">Nosotros — Ruta Frailejón</title>
+  <meta name="description" data-i18n="meta_desc" content="Conoce Ruta Frailejón. Nuestra historia y valores.">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="icon" type="image/svg+xml" href="/assets/icons/frailejon-icon.svg">
   <style>
@@ -62,6 +62,40 @@
       color: #E1306C;
     }
 
+    /* Toggle de idioma */
+    .lang-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(143, 170, 127, 0.15);
+      border: 1px solid #8faa7f;
+      border-radius: 20px;
+      padding: 4px 8px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.85rem;
+      color: #8faa7f;
+      transition: all 0.3s ease;
+      margin-left: 12px;
+    }
+    .lang-toggle:hover {
+      background: rgba(143, 170, 127, 0.3);
+    }
+    .lang-toggle span {
+      padding: 2px 6px;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    .lang-toggle .active-lang {
+      background: #8faa7f;
+      color: #fff;
+      font-weight: 600;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+    }
+
     /* Ajuste para móviles */
     @media (max-width: 768px) {
       .about-grid {
@@ -70,13 +104,18 @@
       .about-image {
         height: 300px;
       }
+      .lang-toggle {
+        margin-left: 0;
+        margin-top: 8px;
+      }
     }
   </style>
+<base target="_blank">
 </head>
 <body>
   <nav class="navbar">
     <div class="nav-container">
-      <a href="/" class="nav-logo">
+      <a href="/" class="nav-logo" target="_self">
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="20" cy="20" r="18" stroke="#8faa7f" stroke-width="2" fill="none"/>
           <path d="M20 8 L20 32 M14 14 Q20 10 26 14 M14 20 Q20 16 26 20 M14 26 Q20 22 26 26" stroke="#8faa7f" stroke-width="2" stroke-linecap="round"/>
@@ -84,9 +123,16 @@
         Ruta Frailejón
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/">Inicio</a></li>
-        <li><a href="/#salidas">Salidas</a></li>
-        <li><a href="/nosotros.html" class="active">Nosotros</a></li>
+        <li><a href="/" target="_self" data-i18n="nav_inicio">Inicio</a></li>
+        <li><a href="/#salidas" target="_self" data-i18n="nav_salidas">Salidas</a></li>
+        <li><a href="/nosotros.html" class="active" target="_self" data-i18n="nav_nosotros">Nosotros</a></li>
+        <li>
+          <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()" aria-label="Cambiar idioma">
+            <span id="langEs" class="active-lang">ES</span>
+            <span>/</span>
+            <span id="langEn">EN</span>
+          </button>
+        </li>
       </ul>
       <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
     </div>
@@ -94,8 +140,8 @@
 
   <section class="section" style="padding-top: 24px;">
     <div class="section-header">
-      <h2>🏕️ Sobre Ruta Frailejón</h2>
-      <p>Un refugio en el corazón del mundo (Colombia)</p>
+      <h2 data-i18n="titulo_sobre">🏕️ Sobre Ruta Frailejón</h2>
+      <p data-i18n="subtitulo_sobre">Un refugio en el corazón del mundo (Colombia)</p>
       <div class="section-divider"></div>
     </div>
 
@@ -104,34 +150,40 @@
         <img src="/assets/images/DJI_20250926140031_0190_D.JPG" alt="Alexis y Karen - Laguna 69 (Peru)">
       </div>
       <div class="about-text">
-        <h3>Nosotros</h3>
-        <p>Tras el largo encierro, sentimos cómo nuestra relación con la naturaleza se había quebrado.
+        <h3 data-i18n="titulo_nosotros">Nosotros</h3>
+        <p data-i18n="parrafo_1">
+          Tras el largo encierro, sentimos cómo nuestra relación con la naturaleza se había quebrado.
           Con una profunda necesidad de sanar esa desconexión y volver a respirar, emprendimos un viaje por Latinoamérica que nos permitió reencontrarnos con nosotros mismos, 
           abrazar la incertidumbre y reconstruir nuestro vínculo esencial con la tierra. Al regresar, tuvimos la certeza absoluta de no querer soltar esa conexión vital,
           dando vida a este proyecto para ser un puente que acerque a otros a los tesoros naturales de Colombia, con un enfoque especial en nuestros páramos y frailejones como 
-          el pulmón sagrado de las montañas y las verdaderas fábricas de agua del planeta.<p>
+          el pulmón sagrado de las montañas y las verdaderas fábricas de agua del planeta.
+        </p>
 
-        <p>Con esta misma pasión, queremos recorrer poco a poco y sin afán los complejos de páramos del país, sin metas de tiempo ni afán de coleccionarlos, 
+        <p data-i18n="parrafo_2">
+          Con esta misma pasión, queremos recorrer poco a poco y sin afán los complejos de páramos del país, sin metas de tiempo ni afán de coleccionarlos, 
           sino con el simple deseo de caminar sus senderos, observar sus paisajes, aprender de ellos y disfrutarlos a plenitud. Creemos firmemente que este 
           acercamiento transforma nuestra forma de relacionarnos con el entorno, por lo que este es un espacio abierto, sin costo y sin necesidad de experiencia previa, 
-          para cualquier persona que quiera compartir el camino bajo dos premisas fundamentales: compartir y respetar el páramo.<p>
+          para cualquier persona que quiera compartir el camino bajo dos premisas fundamentales: compartir y respetar el páramo.
+        </p>
 
-        <p>Cada salida representa una oportunidad para descubrir un lugar nuevo y recordar que estos ecosistemas no son solo paisajes de paso, 
+        <p data-i18n="parrafo_3">
+          Cada salida representa una oportunidad para descubrir un lugar nuevo y recordar que estos ecosistemas no son solo paisajes de paso, 
           sino territorios sagrados que debemos cuidar colectivamente. Los invitamos a dejar atrás el ruido de la ciudad y acompañarnos a explorar
-          estos rincones increíbles, forjando paso a paso una relación directa y consciente con la montaña.<p>
+          estos rincones increíbles, forjando paso a paso una relación directa y consciente con la montaña.
+        </p>
 
         <div class="about-values">
           <div class="value-item">
-            <h4>🌿 Conservación</h4>
-            <p>Protegemos el frailejón y el páramo como fuente de vida.</p>
+            <h4 data-i18n="val_conservacion_titulo">🌿 Conservación</h4>
+            <p data-i18n="val_conservacion_desc">Protegemos el frailejón y el páramo como fuente de vida.</p>
           </div>
           <div class="value-item">
-            <h4>🤝 Comunidad</h4>
-            <p>Espacio de encuentro para viajeros de todo el mundo.</p>
+            <h4 data-i18n="val_comunidad_titulo">🤝 Comunidad</h4>
+            <p data-i18n="val_comunidad_desc">Espacio de encuentro para viajeros de todo el mundo.</p>
           </div>
           <div class="value-item">
-            <h4>🥾 Aventura</h4>
-            <p>Rutas documentadas y actividades para todos los niveles.</p>
+            <h4 data-i18n="val_aventura_titulo">🥾 Aventura</h4>
+            <p data-i18n="val_aventura_desc">Rutas documentadas y actividades para todos los niveles.</p>
           </div>
         </div>
       </div>
@@ -140,19 +192,19 @@
     <!-- Contacto con botones estilizados -->
     <div style="margin-top: 60px; text-align: center;">
       <div class="section-header">
-        <h2>📞 Contáctanos</h2>
-        <p>¿Tienes dudas o quieres acompañarnos? ¡Escríbenos!</p>
+        <h2 data-i18n="titulo_contacto">📞 Contáctanos</h2>
+        <p data-i18n="desc_contacto">¿Tienes dudas o quieres acompañarnos? ¡Escríbenos!</p>
         <div class="section-divider"></div>
       </div>
-      
+
       <div class="contact-buttons">
-        <a href="https://wa.me/573219620590" target="_blank" class="btn-contact btn-whatsapp">
+        <a href="https://wa.me/573219620590" target="_blank" class="btn-contact btn-whatsapp" data-i18n="btn_wa1">
           💬 WhatsApp (+57 321 962 0590)
         </a>
-        <a href="https://wa.me/573125459874" target="_blank" class="btn-contact btn-whatsapp">
+        <a href="https://wa.me/573125459874" target="_blank" class="btn-contact btn-whatsapp" data-i18n="btn_wa2">
           💬 WhatsApp (+57 312 545 9874)
         </a>
-        <a href="https://www.instagram.com/rutafrailejon" target="_blank" class="btn-contact btn-instagram">
+        <a href="https://www.instagram.com/rutafrailejon" target="_blank" class="btn-contact btn-instagram" data-i18n="btn_ig">
           📸 Instagram (@rutafrailejon)
         </a>
       </div>
@@ -163,25 +215,136 @@
     <div class="footer-content">
       <div class="footer-col">
         <h4>🏕️ Ruta Frailejón</h4>
-        <p>Tu refugio en el páramo.</p>
+        <p data-i18n="footer_desc">Tu refugio en el páramo.</p>
       </div>
       <div class="footer-col">
-        <h4>Navegación</h4>
-        <a href="/">Inicio</a>
-        <a href="/#salidas">Salidas</a>
+        <h4 data-i18n="footer_nav">Navegación</h4>
+        <a href="/" target="_self" data-i18n="nav_inicio">Inicio</a>
+        <a href="/#salidas" target="_self" data-i18n="nav_salidas">Salidas</a>
       </div>
       <div class="footer-col">
-        <h4>Contacto</h4>
+        <h4 data-i18n="footer_contacto">Contacto</h4>
         <p>📍 Café Digno</p>
         <p>📱 +57 321 962 0590</p>
         <p>📱 +57 312 545 9874</p>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2026 Ruta Frailejón · Hecho con 🌿 en el páramo</p>
+      <p data-i18n="footer_copy">© 2026 Ruta Frailejón · Hecho con 🌿 en un país de alturas</p>
     </div>
   </footer>
 
   <script src="/assets/js/main.js"></script>
+  <script>
+    // ==========================================
+    // SISTEMA DE TRADUCCIÓN BILINGÜE
+    // ==========================================
+    const translations = {
+      es: {
+        title: "Nosotros — Ruta Frailejón",
+        meta_desc: "Conoce Ruta Frailejón. Nuestra historia y valores.",
+        nav_inicio: "Inicio",
+        nav_salidas: "Salidas",
+        nav_nosotros: "Nosotros",
+        titulo_sobre: "🏕️ Sobre Ruta Frailejón",
+        subtitulo_sobre: "Un refugio en el corazón del mundo (Colombia)",
+        titulo_nosotros: "Nosotros",
+        parrafo_1: "Tras el largo encierro, sentimos cómo nuestra relación con la naturaleza se había quebrado. Con una profunda necesidad de sanar esa desconexión y volver a respirar, emprendimos un viaje por Latinoamérica que nos permitió reencontrarnos con nosotros mismos, abrazar la incertidumbre y reconstruir nuestro vínculo esencial con la tierra. Al regresar, tuvimos la certeza absoluta de no querer soltar esa conexión vital, dando vida a este proyecto para ser un puente que acerque a otros a los tesoros naturales de Colombia, con un enfoque especial en nuestros páramos y frailejones como el pulmón sagrado de las montañas y las verdaderas fábricas de agua del planeta.",
+        parrafo_2: "Con esta misma pasión, queremos recorrer poco a poco y sin afán los complejos de páramos del país, sin metas de tiempo ni afán de coleccionarlos, sino con el simple deseo de caminar sus senderos, observar sus paisajes, aprender de ellos y disfrutarlos a plenitud. Creemos firmemente que este acercamiento transforma nuestra forma de relacionarnos con el entorno, por lo que este es un espacio abierto, sin costo y sin necesidad de experiencia previa, para cualquier persona que quiera compartir el camino bajo dos premisas fundamentales: compartir y respetar el páramo.",
+        parrafo_3: "Cada salida representa una oportunidad para descubrir un lugar nuevo y recordar que estos ecosistemas no son solo paisajes de paso, sino territorios sagrados que debemos cuidar colectivamente. Los invitamos a dejar atrás el ruido de la ciudad y acompañarnos a explorar estos rincones increíbles, forjando paso a paso una relación directa y consciente con la montaña.",
+        val_conservacion_titulo: "🌿 Conservación",
+        val_conservacion_desc: "Protegemos el frailejón y el páramo como fuente de vida.",
+        val_comunidad_titulo: "🤝 Comunidad",
+        val_comunidad_desc: "Espacio de encuentro para viajeros de todo el mundo.",
+        val_aventura_titulo: "🥾 Aventura",
+        val_aventura_desc: "Rutas documentadas y actividades para todos los niveles.",
+        titulo_contacto: "📞 Contáctanos",
+        desc_contacto: "¿Tienes dudas o quieres acompañarnos? ¡Escríbenos!",
+        btn_wa1: "💬 WhatsApp (+57 321 962 0590)",
+        btn_wa2: "💬 WhatsApp (+57 312 545 9874)",
+        btn_ig: "📸 Instagram (@rutafrailejon)",
+        footer_desc: "Tu refugio en el páramo.",
+        footer_nav: "Navegación",
+        footer_contacto: "Contacto",
+        footer_copy: "© 2026 Ruta Frailejón · Hecho con 🌿 en un país de alturas"
+      },
+      en: {
+        title: "About Us — Ruta Frailejón",
+        meta_desc: "Meet Ruta Frailejón. Our story and values.",
+        nav_inicio: "Home",
+        nav_salidas: "Outings",
+        nav_nosotros: "About Us",
+        titulo_sobre: "🏕️ About Ruta Frailejón",
+        subtitulo_sobre: "A refuge in the heart of the world (Colombia)",
+        titulo_nosotros: "About Us",
+        parrafo_1: "After the long lockdown, we felt how our relationship with nature had been broken. With a deep need to heal that disconnection and breathe again, we embarked on a journey through Latin America that allowed us to reconnect with ourselves, embrace uncertainty and rebuild our essential bond with the earth. Upon returning, we had the absolute certainty of not wanting to let go of that vital connection, giving life to this project to be a bridge that brings others closer to the natural treasures of Colombia, with a special focus on our moorlands and frailejones as the sacred lungs of the mountains and the true water factories of the planet.",
+        parrafo_2: "With this same passion, we want to gradually and unhurriedly traverse the country's moorland complexes, without time goals or the urge to collect them, but with the simple desire to walk their trails, observe their landscapes, learn from them and enjoy them to the fullest. We firmly believe that this approach transforms our way of relating to the environment, which is why this is an open space, free of charge and with no prior experience needed, for anyone who wants to share the path under two fundamental premises: share and respect the moorland.",
+        parrafo_3: "Each outing represents an opportunity to discover a new place and remember that these ecosystems are not just passing landscapes, but sacred territories that we must care for collectively. We invite you to leave behind the noise of the city and join us to explore these incredible corners, forging step by step a direct and conscious relationship with the mountain.",
+        val_conservacion_titulo: "🌿 Conservation",
+        val_conservacion_desc: "We protect the frailejón and the moorland as a source of life.",
+        val_comunidad_titulo: "🤝 Community",
+        val_comunidad_desc: "A meeting space for travelers from around the world.",
+        val_aventura_titulo: "🥾 Adventure",
+        val_aventura_desc: "Documented routes and activities for all levels.",
+        titulo_contacto: "📞 Contact Us",
+        desc_contacto: "Have questions or want to join us? Write to us!",
+        btn_wa1: "💬 WhatsApp (+57 321 962 0590)",
+        btn_wa2: "💬 WhatsApp (+57 312 545 9874)",
+        btn_ig: "📸 Instagram (@rutafrailejon)",
+        footer_desc: "Your refuge in the moorland.",
+        footer_nav: "Navigation",
+        footer_contacto: "Contact",
+        footer_copy: "© 2026 Ruta Frailejón · Made with 🌿 in a country of heights"
+      }
+    };
+
+    let currentLang = localStorage.getItem('rf_lang') || 'es';
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      localStorage.setItem('rf_lang', lang);
+      document.documentElement.lang = lang;
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key]) {
+          if (key === 'title') {
+            el.textContent = translations[lang][key];
+          } else if (key === 'meta_desc') {
+            el.setAttribute('content', translations[lang][key]);
+          } else {
+            el.textContent = translations[lang][key];
+          }
+        }
+      });
+
+      const esSpan = document.getElementById('langEs');
+      const enSpan = document.getElementById('langEn');
+      if (lang === 'es') {
+        esSpan.classList.add('active-lang');
+        enSpan.classList.remove('active-lang');
+      } else {
+        enSpan.classList.add('active-lang');
+        esSpan.classList.remove('active-lang');
+      }
+    }
+
+    function toggleLanguage() {
+      const newLang = currentLang === 'es' ? 'en' : 'es';
+      setLanguage(newLang);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setLanguage(currentLang);
+
+      // Forzar links internos a abrir en misma pestaña (anula main.js)
+      document.querySelectorAll('a').forEach(function(link) {
+        var href = link.getAttribute('href') || '';
+        if (!href.startsWith('http') && link.getAttribute('target') !== '_blank') {
+          link.setAttribute('target', '_self');
+        }
+      });
+    });
+  </script>
 </body>
 </html>
