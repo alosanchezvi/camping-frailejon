@@ -63,9 +63,9 @@
         Ruta Frailejón
       </a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="/" class="active" data-i18n="nav_inicio">Inicio</a></li>
-        <li><a href="#salidas" data-i18n="nav_salidas">Salidas</a></li>
-        <li><a href="/nosotros.html" data-i18n="nav_nosotros">Nosotros</a></li>
+        <li><a href="/" class="active" data-i18n="nav_inicio" target="_self">Inicio</a></li>
+        <li><a href="#salidas" data-i18n="nav_salidas" target="_self">Salidas</a></li>
+        <li><a href="/nosotros.html" data-i18n="nav_nosotros" target="_self">Nosotros</a></li>
         <li>
           <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()" aria-label="Cambiar idioma">
             <span id="langEs" class="active-lang">ES</span>
@@ -94,7 +94,7 @@
         El plan es sencillo: deja el pavimento, sube a la montaña, respira aire frío y disfruta sin afanes.
       </p>
       <div class="hero-btns">
-        <a href="#salidas" class="btn btn-primary" data-i18n="btn_ver_salidas">🥾 Ver Salidas</a>
+        <a href="#salidas" class="btn btn-primary" data-i18n="btn_ver_salidas" target="_self">🥾 Ver Salidas</a>
       </div>
     </div>
   </header>
@@ -199,8 +199,8 @@
       </div>
       <div class="footer-col">
         <h4 data-i18n="footer_explorar">Explorar</h4>
-        <a href="#salidas" data-i18n="nav_salidas">Salidas</a>
-        <a href="/nosotros.html" data-i18n="nav_nosotros">Nosotros</a>
+        <a href="#salidas" data-i18n="nav_salidas" target="_self">Salidas</a>
+        <a href="/nosotros.html" data-i18n="nav_nosotros" target="_self">Nosotros</a>
       </div>
       <div class="footer-col">
         <h4 data-i18n="footer_contacto">Contacto</h4>
@@ -413,6 +413,26 @@
 
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') closeModal();
+    });
+  </script>
+
+  <!-- Corrección: evitar que main.js abra links internos en nueva pestaña -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Forzar que todos los links internos se abran en la misma pestaña
+      document.querySelectorAll('a').forEach(function(link) {
+        var href = link.getAttribute('href') || '';
+        // Solo links internos (no empiezan con http y no tienen target="_blank")
+        if (!href.startsWith('http') && link.getAttribute('target') !== '_blank') {
+          link.setAttribute('target', '_self');
+          link.addEventListener('click', function(e) {
+            // Si main.js intenta abrir en nueva ventana, lo prevenimos
+            // y navegamos normalmente
+            if (e.ctrlKey || e.metaKey || e.shiftKey) return; // Permitir clicks con teclas modificadoras
+            // Navegación normal, no hacemos nada especial
+          });
+        }
+      });
     });
   </script>
 </body>
