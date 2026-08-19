@@ -9,11 +9,13 @@
   <link rel="icon" type="image/svg+xml" href="/assets/icons/frailejon-icon.svg">
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
-    /* Estilos para el toggle de idioma */
+    /* ==========================================
+       TOGGLE DE IDIOMA — DISEÑO RESPONSIVE
+       ========================================== */
     .lang-toggle {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       background: rgba(143, 170, 127, 0.15);
       border: 1px solid #8faa7f;
       border-radius: 20px;
@@ -23,58 +25,147 @@
       font-size: 0.85rem;
       color: #8faa7f;
       transition: all 0.3s ease;
-      margin-left: 12px;
+      margin-left: 16px;
+      flex-shrink: 0;
     }
     .lang-toggle:hover {
       background: rgba(143, 170, 127, 0.3);
     }
     .lang-toggle span {
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 12px;
       transition: all 0.3s ease;
+      line-height: 1.4;
     }
     .lang-toggle .active-lang {
       background: #8faa7f;
       color: #fff;
       font-weight: 600;
     }
+
+    /* ==========================================
+       NAVEGACIÓN — ESTRUCTURA RESPONSIVE
+       ========================================== */
     .nav-links {
       display: flex;
       align-items: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 4px;
     }
+    .nav-links li {
+      display: flex;
+      align-items: center;
+    }
+    .nav-links li a {
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+    }
+
+    /* ==========================================
+       MENÚ MÓVIL
+       ========================================== */
     @media (max-width: 768px) {
+      .nav-container {
+        position: relative;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: rgba(18, 28, 18, 0.98);
+        backdrop-filter: blur(12px);
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px 20px 20px;
+        gap: 4px;
+        border-top: 1px solid rgba(143, 170, 127, 0.15);
+        transform: translateY(-10px);
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        z-index: 999;
+      }
+
+      .nav-links.activo {
+        transform: translateY(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      .nav-links li {
+        width: 100%;
+      }
+
+      .nav-links li a {
+        display: block;
+        width: 100%;
+        padding: 12px 16px;
+        text-align: center;
+        font-size: 1.05rem;
+      }
+
+      .nav-links li a.active {
+        background: rgba(143, 170, 127, 0.15);
+      }
+
+      /* Toggle de idioma en móvil: centrado y más grande */
+      .lang-toggle-wrapper {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid rgba(143, 170, 127, 0.1);
+      }
+
       .lang-toggle {
         margin-left: 0;
-        margin-top: 8px;
+        font-size: 1rem;
+        padding: 6px 12px;
+        gap: 6px;
+      }
+
+      .lang-toggle span {
+        padding: 4px 10px;
+        border-radius: 14px;
       }
     }
   </style>
+<base target="_blank">
 <base target="_blank">
 </head>
 <body>
   <!-- Navegación -->
   <nav class="navbar">
     <div class="nav-container">
-      <a href="/" class="nav-logo">
+      <a href="/" class="nav-logo" target="_self">
         <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <circle cx="20" cy="20" r="18" stroke="#8faa7f" stroke-width="2" fill="none"/>
           <path d="M20 8 L20 32 M14 14 Q20 10 26 14 M14 20 Q20 16 26 20 M14 26 Q20 22 26 26" stroke="#8faa7f" stroke-width="2" stroke-linecap="round"/>
         </svg>
         Ruta Frailejón
       </a>
-      <ul class="nav-links" id="navLinks">
-        <li><a href="/" class="active" data-i18n="nav_inicio" target="_self">Inicio</a></li>
-        <li><a href="#salidas" data-i18n="nav_salidas" target="_self">Salidas</a></li>
-        <li><a href="/nosotros.html" data-i18n="nav_nosotros" target="_self">Nosotros</a></li>
-        <li>
+
+      <!-- Menú de navegación + toggle -->
+      <div class="nav-links" id="navLinks">
+        <a href="/" class="active" data-i18n="nav_inicio" target="_self">Inicio</a>
+        <a href="#salidas" data-i18n="nav_salidas" target="_self">Salidas</a>
+        <a href="/nosotros.html" data-i18n="nav_nosotros" target="_self">Nosotros</a>
+        <div class="lang-toggle-wrapper">
           <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()" aria-label="Cambiar idioma">
             <span id="langEs" class="active-lang">ES</span>
             <span>/</span>
             <span id="langEn">EN</span>
           </button>
-        </li>
-      </ul>
-      <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
+        </div>
+      </div>
+
+      <button class="nav-mobile-btn" onclick="toggleMenu()" aria-label="Abrir menú">☰</button>
     </div>
   </nav>
 
