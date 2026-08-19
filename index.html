@@ -24,6 +24,8 @@
         <li><a href="/" class="active">Inicio</a></li>
         <li><a href="#salidas">Salidas</a></li>
         <li><a href="/nosotros.html">Nosotros</a></li>
+        <!-- Opción de cambio de idioma -->
+        <li><a href="/en/" class="lang-btn">EN 🇬🇧</a></li>
       </ul>
       <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
     </div>
@@ -128,14 +130,15 @@
     </div>
     <div class="instagram-section">
       <div class="instagram-placeholder">
-        <p style="font-size: 1.2rem; margin-bottom: 8px;">🌿 @RutaFrailejon</p>
+        <p style="font-size: 1.2rem; margin-bottom: 8px;">
+          <a href="https://www.instagram.com/rutafrailejon/" target="_blank" style="text-decoration: none; color: inherit;">🌿 @rutafrailejon</a>
+        </p>
         <p>
-          Para embeber tu feed de Instagram, ve a<br>
-          <a href="https://www.instagram.com/embed/" target="_blank">instagram.com/embed</a><br>
-          y pega el código aquí.
+          Visita nuestro perfil oficial para ver nuestras últimas aventuras:<br>
+          <a href="https://www.instagram.com/rutafrailejon/" target="_blank">instagram.com/rutafrailejon</a>
         </p>
         <p style="margin-top: 16px; font-size: 0.85rem; opacity: 0.7;">
-          💡 Mientras tanto, sube fotos con el hashtag <b>#RutaFrailejón</b>
+          💡 Sube tus fotos con el hashtag <b>#RutaFrailejón</b>
         </p>
       </div>
     </div>
@@ -146,7 +149,8 @@
     <div class="footer-content">
       <div class="footer-col">
         <h4>🏕️ Ruta Frailejón</h4>
-        <p>Tu refugio en el páramo. Trekking, senderismo y experiencias en la montaña.</p>
+        <!-- Descripción actualizada según instrucciones -->
+        <p>Senderismo y experiencias en la montaña.</p>
       </div>
       <div class="footer-col">
         <h4>Explorar</h4>
@@ -155,14 +159,14 @@
       </div>
       <div class="footer-col">
         <h4>Contacto</h4>
-        <p>📍 Café Digno, Zipaquirá</p>
+        <!-- Eliminada la ubicación de Café Digno y solo se dejaron números de celular -->
         <p>📱 +57 3219620590</p>
         <p>📱 +57 3125459874</p>
-        <p>✉️ hola@rutafrailejon.com</p>
       </div>
       <div class="footer-col">
         <h4>Redes</h4>
-        <a href="https://www.instagram.com/RutaFrailejon" target="_blank">Instagram</a>
+        <!-- Enlace asociado correctamente -->
+        <a href="https://www.instagram.com/rutafrailejon/" target="_blank">Instagram</a>
       </div>
     </div>
     <div class="footer-bottom">
@@ -201,7 +205,8 @@
       };
       
       document.getElementById('modalTitulo').textContent = ruta;
-      document.getElementById('modalInstagram').href = 'https://www.instagram.com/RutaFrailejon';
+      // Enlace de Instagram actualizado en el modal
+      document.getElementById('modalInstagram').href = 'https://www.instagram.com/rutafrailejon/';
       document.getElementById('modalWhatsapp').href = 'https://wa.me/' + telefono + '?text=' + encodeURIComponent(mensajes[ruta]);
       document.getElementById('detalleModal').classList.add('activo');
       document.body.style.overflow = 'hidden';
