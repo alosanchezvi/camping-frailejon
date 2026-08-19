@@ -66,13 +66,12 @@
     }
 
     /* ==========================================
-       MENÚ MÓVIL — compatible con main.js
+       MENÚ MÓVIL
        ========================================== */
     @media (max-width: 768px) {
       .nav-container {
         position: relative;
       }
-
       .nav-links {
         position: absolute;
         top: 100%;
@@ -90,9 +89,8 @@
         pointer-events: none;
         transition: all 0.3s ease;
         z-index: 999;
-        display: flex !important; /* si main.js usa display:none/block */
+        display: flex !important;
       }
-
       .nav-links.activo,
       .nav-links.open,
       .nav-links.show {
@@ -100,12 +98,10 @@
         opacity: 1;
         pointer-events: auto;
       }
-
       .nav-links li {
         width: 100%;
         justify-content: center;
       }
-
       .nav-links li a {
         display: block;
         width: 100%;
@@ -113,34 +109,28 @@
         text-align: center;
         font-size: 1.1rem;
       }
-
       .nav-links li a.active {
         background: rgba(143, 170, 127, 0.15);
       }
-
-      /* Toggle de idioma en móvil */
       .lang-toggle-li {
         justify-content: center;
         margin-top: 8px;
         padding-top: 8px;
         border-top: 1px solid rgba(143, 170, 127, 0.1);
       }
-
       .lang-toggle {
         margin-left: 0;
         font-size: 1rem;
         padding: 6px 12px;
         gap: 6px;
       }
-
       .lang-toggle span {
         padding: 4px 10px;
         border-radius: 14px;
       }
     }
   </style>
-<base target="_blank">
-<base target="_blank">
+  <base target="_blank">
 </head>
 <body>
   <!-- Navegación -->
@@ -199,18 +189,18 @@
     </div>
     <div class="cards-grid" id="salidasContainer">
 
-      <!-- Card 1: PARAMO DE GUERRERO -->
+      <!-- Card 1: Peñas de Pacho -->
       <div class="card">
         <img src="/assets/images/peñas_pacho.jpg" alt="Peñas de Pacho" class="card-image">
         <div class="card-body">
           <span class="card-tag tag-salida" data-i18n="tag_salida">Salida</span>
-          <h3>🌊 <span data-i18n="ruta_laguna">Paramo de Guerrero - Peñas de Pacho</span></h3>
+          <h3>🌊 <span data-i18n="ruta_pacho">Páramo de Guerrero - Peñas de Pacho</span></h3>
           <div class="card-meta">
-            <span>📅 <span data-i18n="fecha_laguna"> Por definir </span></span>
+            <span>📅 <span data-i18n="fecha_pacho">Por definir</span></span>
             <span>⏱️ 5h 30min</span>
             <span>📏 10.0 km</span>
           </div>
-          <p data-i18n="desc_laguna">La ruta presenta condiciones que requieren atención al caminar, probablemente debido a superficies irregulares.</p>
+          <p data-i18n="desc_pacho">La ruta presenta condiciones que requieren atención al caminar, probablemente debido a superficies irregulares.</p>
           <div class="card-footer">
             <span class="card-tag tag-moderada" data-i18n="tag_moderada">Moderada</span>
             <button class="btn btn-small btn-secondary" onclick="openModal('Peñas de Pacho', '573219620590')" data-i18n="btn_detalles">Ver detalles →</button>
@@ -218,18 +208,18 @@
         </div>
       </div>
 
-      <!-- Card 3: Bosque Encantado -->
+      <!-- Card 2: Laguna Verde -->
       <div class="card">
         <img src="/assets/images/laguna_verde.jpeg" alt="Laguna Verde" class="card-image">
         <div class="card-body">
           <span class="card-tag tag-salida" data-i18n="tag_salida">Salida</span>
-          <h3>🌲 <span data-i18n="ruta_bosque">Paramo de Guerrero - Laguna Verde </span></h3>
+          <h3>🌲 <span data-i18n="ruta_verde">Páramo de Guerrero - Laguna Verde</span></h3>
           <div class="card-meta">
-            <span>📅 <span data-i18n="fecha_bosque">Por definir</span></span>
+            <span>📅 <span data-i18n="fecha_verde">Por definir</span></span>
             <span>⏱️ 3h</span>
             <span>📏 5 km</span>
           </div>
-          <p data-i18n="desc_bosque">Enclavada a más de 3.600 metros de altura en el corazón del Páramo de Guerrero (Tausa), la Laguna Verde es un imponente espejo de agua rodeado de frailejones</p>
+          <p data-i18n="desc_verde">Enclavada a más de 3.600 metros de altura en el corazón del Páramo de Guerrero (Tausa), la Laguna Verde es un imponente espejo de agua rodeado de frailejones.</p>
           <div class="card-footer">
             <span class="card-tag tag-facil" data-i18n="tag_facil">Fácil</span>
             <button class="btn btn-small btn-secondary" onclick="openModal('Laguna Verde', '573219620590')" data-i18n="btn_detalles">Ver detalles →</button>
@@ -255,7 +245,6 @@
             Únete a nuestra comunidad y acompáñanos a descubrir la montaña.
           </p>
           
-          <!-- Botón estilizado hacia tu perfil -->
           <a href="https://www.instagram.com/rutafrailejon/" target="_blank" rel="noopener noreferrer" style="display: inline-block; padding: 12px 24px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); color: white; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 1.1rem; transition: transform 0.2s;">
             Ver perfil en Instagram
           </a>
@@ -334,35 +323,37 @@
         titulo_salidas: "Próximas Salidas",
         desc_salidas: "Rutas de trekking programadas para los próximos días",
         tag_salida: "Salida",
-        ruta_laguna: "Laguna Azul",
-        fecha_laguna: "23 Ago 2026",
-        desc_laguna: "Sendero que atraviesa bosque de frailejones con vista panorámica al valle. Ideal para amanecer.",
+        
+        // --- Traducciones actualizadas para las salidas ---
+        ruta_pacho: "Páramo de Guerrero - Peñas de Pacho",
+        fecha_pacho: "Por definir",
+        desc_pacho: "La ruta presenta condiciones que requieren atención al caminar, probablemente debido a superficies irregulares.",
+        
+        ruta_verde: "Páramo de Guerrero - Laguna Verde",
+        fecha_verde: "Por definir",
+        desc_verde: "Enclavada a más de 3.600 metros de altura en el corazón del Páramo de Guerrero (Tausa), la Laguna Verde es un imponente espejo de agua rodeado de frailejones.",
+        // ------------------------------------------------
+        
         tag_moderada: "Moderada",
-        btn_detalles: "Ver detalles →",
-        ruta_cerro: "Cerro Morado",
-        fecha_cerro: "30 Ago 2026",
-        desc_cerro: "Ascenso al mirador más alto de la región. Requiere buena condición física.",
-        tag_dificil: "Difícil",
-        ruta_bosque: "Bosque Encantado",
-        fecha_bosque: "06 Sep 2026",
-        desc_bosque: "Caminata suave entre frailejones gigantes y musgo. Perfecta para familias.",
         tag_facil: "Fácil",
+        btn_detalles: "Ver detalles →",
         titulo_instagram: "📸 Síguenos en Instagram",
         desc_instagram: "El día a día en la ruta, en tiempo real",
-        embed_instagram: 'Para embeber tu feed de Instagram, ve a<br><a href="https://www.instagram.com/embed/" target="_blank">instagram.com/embed</a><br>y pega el código aquí.',
+        invitacion_instagram: "Únete a nuestra comunidad y acompáñanos a descubrir la montaña.",
         hint_instagram: '💡 Mientras tanto, sube fotos con el hashtag <b>#RutaFrailejón</b>',
-        footer_desc: "Tu refugio en el páramo. Trekking, senderismo y experiencias en la montaña.",
+        footer_desc: "Trekking, senderismo y experiencias en la montaña.",
         footer_explorar: "Explorar",
         footer_contacto: "Contacto",
         footer_redes: "Redes",
-        footer_copy: "© 2026 Ruta Frailejón · Hecho con 🌿 en un país de alturas",
+        footer_copy: "© 2026 Ruta Frailejón 🌿 Un país de alturas",
         modal_subtitulo: "¿Cómo quieres conocer más de esta salida?",
         btn_instagram: "📸 Ver en Instagram",
         btn_whatsapp: "💬 Escribir por WhatsApp",
         modal_nota: "Se abrirá en una nueva pestaña",
-        msg_laguna: "Hola Ruta Frailejón, quiero más info sobre la salida a Laguna Azul 🌊",
-        msg_cerro: "Hola Ruta Frailejón, quiero más info sobre la salida a Cerro Morado ⛰️",
-        msg_bosque: "Hola Ruta Frailejón, quiero más info sobre la salida al Bosque Encantado 🌲"
+        
+        // --- Mensajes para el botón de WhatsApp ---
+        msg_pacho: "Hola Ruta Frailejón, quiero más info sobre la salida a Peñas de Pacho 🌊",
+        msg_verde: "Hola Ruta Frailejón, quiero más info sobre la salida a Laguna Verde 🌲"
       },
       en: {
         title: "Ruta Frailejón — Moor, Mist & Adventure",
@@ -376,35 +367,37 @@
         titulo_salidas: "Upcoming Outings",
         desc_salidas: "Scheduled trekking routes for the coming days",
         tag_salida: "Outing",
-        ruta_laguna: "Blue Lagoon",
-        fecha_laguna: "Aug 23, 2026",
-        desc_laguna: "Trail through frailejón forest with panoramic valley views. Ideal for sunrise.",
+        
+        // --- Traducciones actualizadas para las salidas ---
+        ruta_pacho: "Guerrero Moor - Peñas de Pacho",
+        fecha_pacho: "To be defined",
+        desc_pacho: "The route presents conditions that require attention while walking, likely due to uneven surfaces.",
+        
+        ruta_verde: "Guerrero Moor - Green Lagoon",
+        fecha_verde: "To be defined",
+        desc_verde: "Nestled at over 3,600 meters in the heart of the Guerrero Moor (Tausa), the Green Lagoon is a stunning water mirror surrounded by frailejones.",
+        // ------------------------------------------------
+        
         tag_moderada: "Moderate",
-        btn_detalles: "See details →",
-        ruta_cerro: "Purple Hill",
-        fecha_cerro: "Aug 30, 2026",
-        desc_cerro: "Ascent to the region's highest viewpoint. Requires good physical condition.",
-        tag_dificil: "Difficult",
-        ruta_bosque: "Enchanted Forest",
-        fecha_bosque: "Sep 06, 2026",
-        desc_bosque: "Gentle walk among giant frailejones and moss. Perfect for families.",
         tag_facil: "Easy",
+        btn_detalles: "See details →",
         titulo_instagram: "📸 Follow us on Instagram",
         desc_instagram: "Day-to-day on the trail, in real time",
-        embed_instagram: 'To embed your Instagram feed, go to<br><a href="https://www.instagram.com/embed/" target="_blank">instagram.com/embed</a><br>and paste the code here.',
+        invitacion_instagram: "Join our community and discover the mountain with us.",
         hint_instagram: '💡 In the meantime, upload photos with the hashtag <b>#RutaFrailejón</b>',
-        footer_desc: "Your refuge in the moor. Trekking, hiking and mountain experiences.",
+        footer_desc: "Trekking, hiking and mountain experiences.",
         footer_explorar: "Explore",
         footer_contacto: "Contact",
         footer_redes: "Social",
-        footer_copy: "© 2026 Ruta Frailejón · Made with 🌿 in a country of heights",
+        footer_copy: "© 2026 Ruta Frailejón 🌿 A country of heights",
         modal_subtitulo: "How would you like to learn more about this outing?",
         btn_instagram: "📸 View on Instagram",
         btn_whatsapp: "💬 Message on WhatsApp",
         modal_nota: "Will open in a new tab",
-        msg_laguna: "Hello Ruta Frailejón, I want more info about the Blue Lagoon outing 🌊",
-        msg_cerro: "Hello Ruta Frailejón, I want more info about the Purple Hill outing ⛰️",
-        msg_bosque: "Hello Ruta Frailejón, I want more info about the Enchanted Forest outing 🌲"
+        
+        // --- Mensajes para el botón de WhatsApp ---
+        msg_pacho: "Hello Ruta Frailejón, I want more info about the Peñas de Pacho outing 🌊",
+        msg_verde: "Hello Ruta Frailejón, I want more info about the Green Lagoon outing 🌲"
       }
     };
 
@@ -454,21 +447,20 @@
     });
 
     // ==========================================
-    // MODAL (actualizado para usar traducciones)
+    // MODAL (actualizado para las nuevas rutas)
     // ==========================================
     function openModal(ruta, telefono) {
       const t = translations[currentLang];
+      
       const mensajes = {
-        'Laguna Azul': t.msg_laguna,
-        'Cerro Morado': t.msg_cerro,
-        'Bosque Encantado': t.msg_bosque
+        'Peñas de Pacho': t.msg_pacho,
+        'Laguna Verde': t.msg_verde
       };
 
       // Mostrar nombre traducido en el modal
       const nombresTraducidos = {
-        'Laguna Azul': t.ruta_laguna,
-        'Cerro Morado': t.ruta_cerro,
-        'Bosque Encantado': t.ruta_bosque
+        'Peñas de Pacho': t.ruta_pacho,
+        'Laguna Verde': t.ruta_verde
       };
 
       document.getElementById('modalTitulo').textContent = nombresTraducidos[ruta] || ruta;
