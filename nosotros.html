@@ -24,33 +24,44 @@
       object-fit: cover;
       border-radius: 12px;
     }
+    /* Estilos armonizados para los botones de contacto */
     .contact-buttons {
       display: flex;
       gap: 16px;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 24px;
+      margin-top: 28px;
     }
     .btn-contact {
-      padding: 14px 28px;
-      border-radius: 8px;
+      padding: 12px 24px;
+      border-radius: 50px;
       text-decoration: none;
-      font-weight: bold;
-      color: #ffffff;
-      display: flex;
+      font-weight: 600;
+      font-size: 0.95rem;
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
-      transition: opacity 0.3s ease;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(143, 170, 127, 0.25);
+      color: #ffffff;
+      backdrop-filter: blur(8px);
+      transition: all 0.3s ease;
     }
     .btn-contact:hover {
-      opacity: 0.85;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
     }
-    .btn-whatsapp {
-      background-color: #25D366;
+    .btn-whatsapp:hover {
+      background: rgba(37, 211, 102, 0.12);
+      border-color: #25D366;
+      color: #25D366;
     }
-    .btn-instagram {
-      background-color: #E1306C;
+    .btn-instagram:hover {
+      background: rgba(225, 48, 108, 0.12);
+      border-color: #E1306C;
+      color: #E1306C;
     }
+
     /* Ajuste para móviles */
     @media (max-width: 768px) {
       .about-grid {
@@ -74,6 +85,7 @@
       </a>
       <ul class="nav-links" id="navLinks">
         <li><a href="/">Inicio</a></li>
+        <li><a href="/#salidas">Salidas</a></li>
         <li><a href="/nosotros.html" class="active">Nosotros</a></li>
       </ul>
       <button class="nav-mobile-btn" onclick="toggleMenu()">☰</button>
@@ -89,7 +101,7 @@
 
     <div class="about-grid">
       <div class="about-image">
-        <img src="/assets/images/DJI_20250926140031_0190_D.JPG" alt="Alexis y Karen  - Laguna 69 (Peru)">
+        <img src="/assets/images/DJI_20250926140031_0190_D.JPG" alt="Alexis y Karen - Laguna 69 (Peru)">
       </div>
       <div class="about-text">
         <h3>Nosotros</h3>
@@ -125,7 +137,7 @@
       </div>
     </div>
 
-    <!-- Contacto con botones directos -->
+    <!-- Contacto con botones estilizados -->
     <div style="margin-top: 60px; text-align: center;">
       <div class="section-header">
         <h2>📞 Contáctanos</h2>
@@ -134,12 +146,11 @@
       </div>
       
       <div class="contact-buttons">
-        <!-- Reemplaza los números si necesitas ajustarlos. El formato de wa.me es sin el '+' -->
         <a href="https://wa.me/573219620590" target="_blank" class="btn-contact btn-whatsapp">
-          📱 WhatsApp (+57 321 962 0590)
+          💬 WhatsApp (+57 321 962 0590)
         </a>
         <a href="https://wa.me/573125459874" target="_blank" class="btn-contact btn-whatsapp">
-          📱 WhatsApp (+57 312 545 9874)
+          💬 WhatsApp (+57 312 545 9874)
         </a>
         <a href="https://www.instagram.com/rutafrailejon" target="_blank" class="btn-contact btn-instagram">
           📸 Instagram (@rutafrailejon)
@@ -156,7 +167,8 @@
       </div>
       <div class="footer-col">
         <h4>Navegación</h4>
-        <a href="/">Volver al Inicio</a>
+        <a href="/">Inicio</a>
+        <a href="/#salidas">Salidas</a>
       </div>
       <div class="footer-col">
         <h4>Contacto</h4>
