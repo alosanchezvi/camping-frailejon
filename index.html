@@ -131,6 +131,7 @@
     }
   </style>
   <base target="_blank">
+<base target="_blank">
 </head>
 <body>
   <!-- Navegación -->
@@ -517,5 +518,670 @@
       });
     })();
   </script>
+
+<!-- ================================================================
+     WIDGET: FRAILEJÓN ANCIANO · chat flotante con selector de temas
+     Integrado con API Guardián del Páramo (FastAPI + streaming NDJSON)
+     ================================================================ -->
+<script>
+
+(function () {
+  'use strict';
+  if (window.__frailejonWidget) return;      // evita doble instalación
+  window.__frailejonWidget = true;
+
+  /* ================================================================
+     1) CONFIGURACIÓN — lo único que tienes que tocar
+     ================================================================ */
+  const CONFIG = {
+    // Tu endpoint RAG real (ajusta el dominio cuando despliegues)
+    endpoint: 'http://localhost:7860/chat',
+
+    // Endpoint GET que devuelve los temas desde tu RAG
+    topicsEndpoint: 'http://localhost:7860/temas',
+
+    // Temas por defecto mientras carga /temas
+    topics: [
+      { id: 'general', label: 'Charla libre' }
+    ],
+
+    useMock: false,   // ⇦ API real activada
+    title: 'Don Frailejón',
+    greeting: '¡Eh, bienvenido, caminante! Soy Don Frailejón: viejo de la ladera y contador de cosas. ' +
+              'Elige un tema en la fila de abajo y pregúntame con confianza, que por estos lados ' +
+              'el saber se regala y la niebla no cobra entrada.'
+  };
+
+  /* ================================================================
+     2) CONEXIÓN CON TU RAG — único punto de integración
+     ================================================================ */
+  async function callRAG(payload) {
+    if (CONFIG.useMock || !CONFIG.endpoint) return mockRAG(payload);
+    const ctrl = new AbortController();
+    const to = setTimeout(() => ctrl.abort(), 30000); // 30 s de paciencia
+    try {
+      const r = await fetch(CONFIG.endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          pregunta: payload.question,   // tu API espera "pregunta"
+          tema: payload.topic,          // tu API espera "tema"
+          historial: payload.history    // tu API espera "historial"
+        }),
+        signal: ctrl.signal
+      });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+
+      /* ---- LECTURA DEL STREAM NDJSON ---- */
+      const reader = r.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      let fullAnswer = '';
+      let sources = null;
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop(); // última línea puede estar incompleta
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const obj = JSON.parse(line);
+            if (obj.t !== undefined) fullAnswer += obj.t;
+            if (obj.sources) sources = obj.sources;
+          } catch (e) { /* línea rara, saltamos */ }
+        }
+      }
+      if (buffer.trim()) {
+        try {
+          const obj = JSON.parse(buffer);
+          if (obj.t !== undefined) fullAnswer += obj.t;
+          if (obj.sources) sources = obj.sources;
+        } catch (e) {}
+      }
+      return { answer: fullAnswer, sources };
+    } catch (err) { throw err; }
+    finally { clearTimeout(to); }
+  }
+
+  /* ---- Mock local para probar sin servidor (se ignora al conectar) ---- */
+  const MOCK_ANSWERS = {
+    agua: [
+      { answer: 'Mire, vea: el páramo es una esponja puesta en la montaña. La turba recibe la lluvia, la deja reposar como quien guarda café, y la regala abajo clara y mansa. Un solo frailejón junta litros de agua al día entre niebla y aguacero; por eso donde hay frailejones hay río seguro todo el año.',
+        sources: [{ title: 'Ficha de manejo · Páramo de Chingaza', ref: 'parques.co/chingaza' },
+                  { title: 'Informe de cuencas 2024', ref: 'instituto-agua.co/cuencas' }] },
+      { answer: 'El secreto está en las hojas: peludas como cobija de lana, atrapan la neblina gota a gota y la dejan caer a la tierra. Abajo, la turba —que es tierra de siglos— la guarda como quien guarda plata, y después la entrega a los ríos que beben los pueblos. No es magia: es paciencia con hojas.',
+        sources: [{ title: 'Manual del páramo andino', ref: 'eco-libros.co/paramo' }] }
+    ],
+    biodiversidad: [
+      { answer: 'Aquí conviven el oso de anteojos, el cóndor, el conejo sabanero y ranas que no se ven en ningún otro rincón del mundo. El páramo es un pueblo chiquito de especies únicas: cada cual con su oficio. Cuidar una sola de ellas es cuidar la casa completa, mijo.',
+        sources: [{ title: 'Catálogo de flora y fauna de altura', ref: 'biodiversidad.co/paramo' }] }
+    ],
+    clima: [
+      { answer: 'Acá arriba el clima cambia de humor tres veces al día: sol, llovizna y helada, a veces las tres en una hora. Mis hojas son mi ruana: guardan agua y aguantan frío. Pero si la temperatura sube, la neblina se va y la esponja se seca… y eso lo pagamos todos los que viven abajo.',
+        sources: [{ title: 'Monitoreo climático del páramo 2024', ref: 'clima-andino.co/paramos' }] }
+    ],
+    cultura: [
+      { answer: 'Los campesinos y yo llevamos siglos de ser vecinos: ellos saben leer las nubes y yo sé dónde nace el agua. Del páramo han salido remedios, canciones y la costumbre del agua de panela con queso. Eso es saber antiguo, de los que no se gastan.',
+        sources: [{ title: 'Memorias campesinas del altiplano', ref: 'cultura-rural.co/memorias' }] }
+    ],
+    conservacion: [
+      { answer: 'Pa\u2019 cuidarme no hay ciencia rara: no me queme, no me pise, y deje descansar la tierra. Un frailejón tarda decenas de años en crecer un metro; destruirnos es fácil, devolvernos no. Sembrar árboles de clima frío, dejar que la neblina trabaje y no abrir zanjas: eso sí es restaurar.',
+        sources: [{ title: 'Guía de restauración de páramos', ref: 'restaurar.co/paramos' }] }
+    ],
+    general: [
+      { answer: 'Por aquí el saber se regala, caminante. Pregúnteme del agua, del frío, de los animales o de la gente de la ladera. O lléveme una perla: «no hay neblina que dure cien años, ni paso apurado que la evite; camine tranquilo y con abrigo».', sources: [] }
+    ]
+  };
+  async function mockRAG({ topic }) {
+    await new Promise(r => setTimeout(r, 750 + Math.random() * 650));
+    const set = MOCK_ANSWERS[topic] || MOCK_ANSWERS.general;
+    return { ...set[Math.floor(Math.random() * set.length)] };
+  }
+
+  /* ================================================================
+     3) UTILIDADES
+     ================================================================ */
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const pick = a => a[Math.floor(Math.random() * a.length)];
+  const esc = s => String(s).replace(/[&<>"']/g, m =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Fuentes (se auto-inyectan una sola vez; dentro del Shadow DOM se heredan bien)
+  if (!document.getElementById('fj-fonts')) {
+    const l = document.createElement('link');
+    l.id = 'fj-fonts'; l.rel = 'stylesheet';
+    l.href = 'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Karla:wght@400;500;600;700&display=swap';
+    document.head.appendChild(l);
+  }
+
+  const ICON_CLOSE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+  const ICON_SEND  = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 20.4 21 12 3.6 3.6 3.6 10l12 2-12 2z"/></svg>';
+  const ICON_DOC   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>';
+
+  /* ================================================================
+     4) EL PERSONAJE — frailejón anciano en SVG (reutilizable)
+     ================================================================ */
+  const MOUTH = {
+    smile: 'M52.5 72.5 Q60 78.5 67.5 72.5 Q60 75.8 52.5 72.5 Z',
+    open : 'M53.5 71.5 Q60 81 66.5 71.5 Q60 74.5 53.5 71.5 Z',
+    mid  : 'M53.5 72 Q60 76 66.5 72 Q60 74 53.5 72 Z'
+  };
+
+  function charSVG(uid) {
+    const leaf = (a, len, w, fill, inner) => {
+      const d = `M0 4 C ${w} ${-len * .28} ${w * .9} ${-len * .78} 0 ${-len} C ${-w * .9} ${-len * .78} ${-w} ${-len * .28} 0 4 Z`;
+      return `<g transform="translate(60 66) rotate(${a})">
+        <path d="${d}" fill="${fill}" stroke="${inner ? '#7c9a72' : '#5c7d58'}" stroke-width="${inner ? 1 : 1.4}"/>
+        <path d="${d}" fill="none" stroke="#e2ecc4" stroke-width="1.2" stroke-dasharray="1.4 4.6"
+              stroke-linecap="round" transform="scale(1.14)" opacity=".95"/>
+      </g>`;
+    };
+    let leaves = '';
+    [[-115,27,7,'#7fa379'],[-82,34,8.5,'#8cae7f'],[-52,33,8,'#76996f'],[-26,35,8.5,'#7fa379'],
+     [0,36,9,'#8cae7f'],[26,35,8.5,'#76996f'],[52,33,8,'#7fa379'],[82,34,8.5,'#8cae7f'],[115,27,7,'#76996f']]
+      .forEach(([a,l,w,c]) => leaves += leaf(a,l,w,c,false));
+    [[-38,21,5.5,'#9cb88a'],[-13,23,6,'#a9c49a'],[13,23,6,'#9cb88a'],[38,21,5.5,'#a9c49a']]
+      .forEach(([a,l,w,c]) => leaves += leaf(a,l,w,c,true));
+
+    let petals = '';
+    for (let i = 0; i < 8; i++)
+      petals += `<ellipse rx="2.7" ry="6.2" cy="-6.6" transform="rotate(${i * 45})"
+                  fill="${i % 2 ? '#eeaa2e' : '#f2b53a'}" stroke="#d18f22" stroke-width=".7"/>`;
+
+    const skirt = [[50,-14,'#a5834f'],[57,-5,'#b99a72'],[64,4,'#96754c'],[71,12,'#a8875b']]
+      .map(([x, r, c]) => `<g transform="translate(${x} 86) rotate(${r})">
+        <path d="M0 0 C3 6 3 11 0 15 C-3 11 -3 6 0 0Z" fill="${c}" stroke="#7c613f" stroke-width=".7"/></g>`).join('');
+
+    const brow = (cls, d) => `<g class="c-brow ${cls}">
+      <path d="${d}" fill="none" stroke="#e7e2cf" stroke-width="5.6" stroke-linecap="round"/>
+      <path d="${d}" fill="none" stroke="#cfc9ae" stroke-width="5.6" stroke-linecap="round" stroke-dasharray="0.6 3.3"/>
+    </g>`;
+    const eye = (cx, clip) => `<g class="c-eye">
+      <circle cx="${cx}" cy="58" r="6.8" fill="#fdfbf1" stroke="#39342b" stroke-width="1.5"/>
+      <g class="c-pupil">
+        <circle cx="${cx}" cy="58" r="3.5" fill="#2f2b24"/>
+        <circle cx="${cx - 1.4}" cy="56.6" r="1.25" fill="#fff"/>
+        <circle cx="${cx + 1.7}" cy="59.4" r=".7" fill="#fff" opacity=".8"/>
+      </g>
+      <g class="c-lid" clip-path="url(#${clip})"><rect x="${cx - 9}" y="49" width="18" height="18" fill="#e9edd3"/></g>
+    </g>`;
+
+    return `<svg class="fj" viewBox="0 0 120 120" aria-hidden="true">
+      <defs>
+        <clipPath id="fjL${uid}"><circle cx="50" cy="58" r="6.8"/></clipPath>
+        <clipPath id="fjR${uid}"><circle cx="70" cy="58" r="6.8"/></clipPath>
+      </defs>
+      <g class="c-root">
+        <ellipse cx="60" cy="112.5" rx="25" ry="5.5" fill="#628a63"/>
+        <g class="c-leaves">${leaves}</g>
+        <g class="c-cane">
+          <path d="M28 108 C28 88 29 70 28 57 C28 50 22.5 47.5 18.8 51.5 C17 53.5 17.2 56.5 19.2 58.2"
+                fill="none" stroke="#6d4b2e" stroke-width="5" stroke-linecap="round"/>
+          <path d="M26.8 66 C26.2 76 27.2 90 26.8 104" fill="none" stroke="#8a6a45" stroke-width="1.6" opacity=".8"/>
+          <path d="M25.6 62 C22.8 66 25.6 70 22.8 74" fill="none" stroke="#c2603f" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M27.8 62 C30.6 66 27.8 70 30.4 73" fill="none" stroke="#a9532f" stroke-width="2.4" stroke-linecap="round"/>
+        </g>
+        <path d="M48 85 C49 95 47.5 105 45 114 L79 114 C76.5 105 75.5 95 77 85 C71.5 82.5 53.5 82.5 48 85 Z" fill="#84684b"/>
+        <path d="M57 88 C57 96 56 104 55 112" stroke="#6a5138" stroke-width="1.3" fill="none" opacity=".45"/>
+        <path d="M66 88 C67 96 68 104 69 112" stroke="#9a7c5c" stroke-width="2.4" fill="none" opacity=".55"/>
+        ${skirt}
+        <path d="M50 93.5 C43 91 35 91.5 30 94.5" fill="none" stroke="#6f9370" stroke-width="3.6" stroke-linecap="round"/>
+        <circle cx="29" cy="95" r="3.8" fill="#7fa379" stroke="#597c56" stroke-width=".9"/>
+        <g class="c-head">
+          <ellipse cx="60" cy="63" rx="26" ry="23" fill="#e9edd3"/>
+          <g fill="none" stroke="#ece8d8" stroke-width="1.7" stroke-linecap="round" opacity=".95">
+            <path d="M52.5 81 C51.5 85 52.5 88.5 50.5 91.5"/>
+            <path d="M60 83 C60 88 60 91 60 94"/>
+            <path d="M67.5 81 C68.5 85 67.5 88.5 69.5 91.5"/>
+            <path d="M47 76 C44 80 43.5 84.5 45.5 88"/>
+            <path d="M73 76 C76 80 76.5 84.5 74.5 88"/>
+          </g>
+          ${brow('bl', 'M41.5 48 C45 44.2 50.2 44.2 53.8 47')}
+          ${brow('br', 'M66.2 47 C69.8 44.2 75 44.2 78.5 48')}
+          ${eye(50, 'fjL' + uid)}
+          ${eye(70, 'fjR' + uid)}
+          <ellipse cx="60" cy="65.5" rx="3.4" ry="2.6" fill="#dde3bd" stroke="#c2cb9a" stroke-width="1"/>
+          <ellipse cx="45" cy="66.5" rx="4" ry="2.4" fill="#d79a78" opacity=".33"/>
+          <ellipse cx="75" cy="66.5" rx="4" ry="2.4" fill="#d79a78" opacity=".33"/>
+          <path class="c-mouth" d="${MOUTH.smile}" fill="#46402f"/>
+          <g transform="translate(84.5 45.5) rotate(14)"><g class="c-fl">${petals}
+            <circle r="2.7" fill="#b06e1f"/><circle cx="-.9" cy="-.9" r=".9" fill="#e0913c"/>
+          </g></g>
+        </g>
+      </g>
+    </svg>`;
+  }
+
+  /* ---- Instancia de personaje con API: blink / talk / think / tap / ojos ---- */
+  const chars = [];
+  function makeChar(container, opts = {}) {
+    const uid = Math.random().toString(36).slice(2, 7);
+    container.innerHTML = charSVG(uid);
+    const svg = container.querySelector('svg');
+    const mouthEl = svg.querySelector('.c-mouth');
+    const pupils = [...svg.querySelectorAll('.c-pupil')];
+    const api = {
+      track: !!opts.track, thinking: false, ex: 0, ey: 0, _t: null, svg, pupils,
+      blink() { svg.classList.add('blink'); setTimeout(() => svg.classList.remove('blink'), 240); },
+      setMouth(m) { mouthEl.setAttribute('d', MOUTH[m]); },
+      talk(on) {
+        clearInterval(api._t);
+        if (on) api._t = setInterval(() => api.setMouth(pick(['open', 'mid', 'open', 'smile'])), 115);
+        else api.setMouth('smile');
+      },
+      think(on) { api.thinking = on; svg.classList.toggle('think', on); },
+      tap() {
+        if (RM) return;
+        svg.classList.remove('tap'); void svg.getBoundingClientRect();
+        svg.classList.add('tap'); setTimeout(() => svg.classList.remove('tap'), 560);
+      }
+    };
+    (function blinkLoop() {
+      setTimeout(() => { if (!document.hidden) api.blink(); blinkLoop(); }, 2600 + Math.random() * 3600);
+    })();
+    chars.push(api);
+    return api;
+  }
+
+  /* ================================================================
+     5) MONTAJE EN SHADOW DOM (aislado del CSS de tu página)
+     ================================================================ */
+  const host = document.createElement('div');
+  host.id = 'frailejon-widget';
+  const root = host.attachShadow({ mode: 'open' });
+  root.innerHTML = `
+  <style>
+    :host{ position:fixed; right:18px; bottom:18px; z-index:2147483000; pointer-events:none;
+           width:0; height:0; font-family:Karla,system-ui,sans-serif; }
+    @media (max-width:520px){ :host{ right:10px; bottom:10px; } }
+    *{ box-sizing:border-box; margin:0; }
+    button{ font-family:inherit; cursor:pointer; }
+
+    /* ---------- personaje ---------- */
+    .fj{ width:100%; height:100%; display:block; user-select:none; }
+    .c-root{ transform-box:fill-box; transform-origin:50% 100%;
+             animation:fjidle 5s ease-in-out infinite alternate; }
+    @keyframes fjidle{ from{ transform:rotate(-1.1deg);} to{ transform:rotate(1.1deg);} }
+    .c-head{ transform-box:fill-box; transform-origin:50% 88%; transition:transform .45s cubic-bezier(.34,1.5,.55,1); }
+    .fj.think .c-head{ transform:rotate(-4.5deg); }
+    .c-brow{ transform-box:fill-box; transition:transform .4s cubic-bezier(.34,1.5,.55,1); }
+    .c-brow.bl{ transform-origin:95% 60%; } .c-brow.br{ transform-origin:5% 60%; }
+    .fj.think .c-brow.bl{ transform:rotate(11deg) translateY(1.2px); }
+    .fj.think .c-brow.br{ transform:rotate(-11deg) translateY(1.2px); }
+    .c-lid{ transform:translateY(-17px); }
+    .fj.blink .c-lid{ animation:fjblink .22s ease; }
+    @keyframes fjblink{ 40%,60%{ transform:translateY(0);} }
+    .c-cane{ transform-box:fill-box; transform-origin:30% 95%; }
+    .fj.tap .c-cane{ animation:fjtap .5s ease-out; }
+    @keyframes fjtap{ 25%{ transform:rotate(4.5deg);} 55%{ transform:rotate(-1deg);} 80%{ transform:rotate(2deg);} }
+
+    /* ---------- botón flotante ---------- */
+    .launcher{ position:absolute; right:0; bottom:0; width:88px; height:88px; border-radius:50%;
+      background:#f7f2e2; border:1.5px solid #d9cdb0; pointer-events:auto; cursor:pointer;
+      box-shadow:0 12px 28px -10px rgba(40,58,38,.5);
+      transition:transform .25s cubic-bezier(.34,1.5,.5,1), box-shadow .2s; }
+    .launcher:hover{ transform:translateY(-4px) scale(1.04); box-shadow:0 18px 34px -12px rgba(40,58,38,.55); }
+    .launcher:hover .c-head{ transform:rotate(4.5deg); }
+    .launcher:active{ transform:scale(.94); }
+    .launcher:focus-visible{ outline:2.5px dashed #6f9370; outline-offset:4px; }
+    .launcher .char{ position:absolute; inset:5px 4px 4px; pointer-events:none; }
+    .badge{ position:absolute; top:0; right:-2px; min-width:22px; height:22px; padding:0 5px;
+      border-radius:11px; background:#c2603f; color:#fdf6e8; border:2px solid #f7f2e2;
+      font:700 12px/19px Karla,sans-serif; text-align:center; box-shadow:0 3px 8px rgba(0,0,0,.22); }
+    .badge.pop{ animation:fjpop .45s cubic-bezier(.34,1.8,.5,1); }
+    @keyframes fjpop{ from{ transform:scale(0);} }
+
+    /* ---------- burbuja de invitación ---------- */
+    .invite{ position:absolute; right:100px; bottom:24px; max-width:215px; background:#f7f2e2;
+      border:1.5px solid #d9cdb0; border-radius:14px 14px 4px 14px; padding:10px 13px;
+      font-size:13.5px; line-height:1.45; color:#37402c; pointer-events:auto; cursor:pointer;
+      box-shadow:0 12px 28px -12px rgba(40,58,38,.45);
+      opacity:0; transform:translateY(8px); visibility:hidden;
+      transition:opacity .35s ease, transform .35s ease, visibility .35s; }
+    .invite.show{ opacity:1; transform:none; visibility:visible; }
+    .invite::after{ content:""; position:absolute; right:-7px; bottom:13px; width:12px; height:12px;
+      background:#f7f2e2; border-right:1.5px solid #d9cdb0; border-top:1.5px solid #d9cdb0;
+      transform:rotate(45deg); }
+    .invite:focus-visible{ outline:2.5px dashed #6f9370; outline-offset:3px; }
+
+    /* ---------- panel ---------- */
+    .panel{ position:absolute; right:0; bottom:104px; width:min(382px, calc(100vw - 24px));
+      height:min(566px, calc(100dvh - 132px)); min-height:380px; display:flex; flex-direction:column;
+      background:#f7f2e2; border:1.5px solid #d9cdb0; border-radius:18px; overflow:hidden;
+      box-shadow:0 30px 70px -25px rgba(35,52,32,.5); pointer-events:auto;
+      transform-origin:100% 100%; opacity:0; visibility:hidden;
+      transform:translateY(16px) scale(.95);
+      transition:transform .32s cubic-bezier(.3,1.35,.45,1), opacity .25s ease, visibility .32s; }
+    .panel.open{ opacity:1; visibility:visible; transform:none; }
+
+    .p-head{ display:flex; align-items:center; gap:11px; padding:9px 12px;
+      background:#f2ecd9; border-bottom:1.5px dashed #d9cdb0; }
+    .p-head .char{ width:52px; height:52px; flex:none; }
+    .who{ flex:1; min-width:0; }
+    .who strong{ font:700 16.5px Fraunces,serif; color:#2f3b28; display:block; }
+    .status{ display:flex; align-items:center; gap:6px; font-size:12px; color:#5c6a4f; }
+    .dot{ width:7px; height:7px; border-radius:50%; background:#7fae6b; flex:none; transition:background .3s; }
+    .panel[data-state="thinking"] .dot, .panel[data-state="talking"] .dot{
+      background:#d9a13b; animation:fjpulse 1s ease-in-out infinite; }
+    @keyframes fjpulse{ 50%{ transform:scale(1.4); opacity:.65; } }
+    .iconbtn{ width:34px; height:34px; border-radius:50%; border:1px solid #cfc4a2; background:#fbf7ea;
+      color:#5c6a4f; display:grid; place-items:center; flex:none; transition:background .2s, transform .15s; }
+    .iconbtn:hover{ background:#f0e9d2; } .iconbtn:active{ transform:scale(.9); }
+    .iconbtn svg{ width:17px; height:17px; }
+    .iconbtn:focus-visible{ outline:2px dashed #6f9370; outline-offset:2px; }
+
+    /* ---------- temas ---------- */
+    .topics{ display:flex; gap:7px; padding:9px 12px; overflow-x:auto; flex:none;
+      background:#f5efdd; border-bottom:1px solid #e6dcc0; scrollbar-width:thin; }
+    .topics::-webkit-scrollbar{ height:6px; }
+    .topics::-webkit-scrollbar-thumb{ background:#d5caa8; border-radius:6px; }
+    .topic{ flex:none; border:1.2px solid #b6c7a2; background:#eff4e3; color:#42522f;
+      border-radius:999px; padding:5.5px 12px; font:600 12.5px Karla,sans-serif;
+      transition:background .2s, color .2s, transform .15s; }
+    .topic:hover{ transform:translateY(-1px); background:#e2ecd2; }
+    .topic[aria-pressed="true"]{ background:#3f5d3f; border-color:#3f5d3f; color:#f2efdd; }
+    .topic:focus-visible{ outline:2px dashed #6f9370; outline-offset:2px; }
+
+    /* ---------- conversación ---------- */
+    .log{ flex:1; overflow-y:auto; padding:16px 14px 8px; display:flex; flex-direction:column; gap:11px; }
+    .log::-webkit-scrollbar{ width:8px; }
+    .log::-webkit-scrollbar-thumb{ background:#d5caa8; border-radius:8px; }
+    .msg{ max-width:85%; padding:10px 14px; border-radius:14px; font-size:14.5px; line-height:1.52;
+      animation:fjin .3s cubic-bezier(.3,1.3,.5,1); }
+    @keyframes fjin{ from{ opacity:0; transform:translateY(9px) scale(.97);} }
+    .msg.bot{ align-self:flex-start; background:#e7eedb; border:1px solid #ccd9ba; color:#35402a;
+      border-bottom-left-radius:5px; }
+    .msg.user{ align-self:flex-end; background:#eadfc2; border:1px solid #d8c8a2; color:#4a3f26;
+      border-bottom-right-radius:5px; }
+    .msg .time{ display:block; font-size:10.5px; opacity:.55; margin-top:5px; }
+    .caret{ display:inline-block; width:8px; height:14px; margin-left:3px; vertical-align:-2px;
+      background:#7d9463; animation:fjpulse .8s steps(2) infinite; }
+    .msg.typing{ display:flex; gap:5px; align-items:center; padding:13px 15px; }
+    .msg.typing i{ width:7px; height:7px; border-radius:50%; background:#7d9463;
+      animation:fdot 1s ease-in-out infinite; }
+    .msg.typing i:nth-child(2){ animation-delay:.15s; }
+    .msg.typing i:nth-child(3){ animation-delay:.3s; }
+    @keyframes fdot{ 40%{ transform:translateY(-5px); opacity:.55; } }
+    .notice{ align-self:center; font:italic 12.5px Karla,sans-serif; color:#6a775c;
+      background:#efe9d2; border:1px dashed #d5caa8; padding:5px 13px; border-radius:999px; }
+    .srcs{ display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+    .src{ font:11px Karla,sans-serif; color:#5c6a4f; border:1px solid #ccd9ba; background:#eef3e2;
+      border-radius:7px; padding:3px 8px; display:flex; gap:5px; align-items:center; }
+    .src svg{ width:11px; height:11px; flex:none; }
+
+    /* ---------- compositor ---------- */
+    .composer{ display:flex; gap:10px; padding:11px 12px 13px; border-top:1px solid #e2d8bc; }
+    .composer input{ flex:1; min-width:0; background:#fffdf4; border:1.5px solid #cfc4a2;
+      border-radius:12px; padding:10px 13px; font:15px Karla,sans-serif; color:#37402c;
+      transition:border-color .2s, box-shadow .2s; }
+    .composer input::placeholder{ color:#a99f80; }
+    .composer input:focus{ outline:none; border-color:#7f9f60; box-shadow:0 0 0 3px rgba(127,159,96,.18); }
+    .composer button{ width:45px; height:45px; border:none; border-radius:50%; flex:none;
+      background:#3f5d3f; color:#f2efdd; display:grid; place-items:center;
+      transition:background .2s, transform .15s; }
+    .composer button:hover{ background:#334e33; }
+    .composer button:active{ transform:scale(.9); }
+    .composer button svg{ width:19px; height:19px; }
+    .composer button:focus-visible, input:focus-visible{ outline:2px dashed #6f9370; outline-offset:2px; }
+
+    @media (max-width:520px){
+      .launcher{ width:74px; height:74px; }
+      .panel{ bottom:92px; width:calc(100vw - 20px); height:calc(100dvh - 122px); }
+      .invite{ right:84px; max-width:178px; }
+    }
+    @media (prefers-reduced-motion:reduce){
+      *, *::before, *::after{ animation-duration:.001s !important;
+        animation-iteration-count:1 !important; transition-duration:.001s !important; }
+    }
+  </style>
+
+  <div class="invite">¿Conversamos un rato sobre el páramo, caminante?</div>
+  <div class="launcher" role="button" tabindex="0" aria-expanded="false"
+       aria-label="Abrir chat con Don Frailejón, el frailejón anciano">
+    <span class="char" id="fj-main"></span>
+    <span class="badge" hidden></span>
+  </div>
+  <section class="panel" role="dialog" aria-label="Chat con Don Frailejón" data-state="idle">
+    <header class="p-head">
+      <span class="char" id="fj-head"></span>
+      <div class="who">
+        <strong>${CONFIG.title}</strong>
+        <span class="status"><i class="dot"></i><em id="fj-status">vigilando la neblina</em></span>
+      </div>
+      <button class="iconbtn" id="fj-close" aria-label="Cerrar chat">${ICON_CLOSE}</button>
+    </header>
+    <div class="topics" id="fj-topics" aria-label="Temas de conversación"></div>
+    <div class="log" id="fj-log" role="log" aria-live="polite"></div>
+    <form class="composer" id="fj-form" autocomplete="off">
+      <input id="fj-inp" maxlength="300" placeholder="Escríbale al abuelo…"
+             aria-label="Mensaje para Don Frailejón"/>
+      <button type="submit" aria-label="Enviar mensaje">${ICON_SEND}</button>
+    </form>
+  </section>`;
+
+  document.body.appendChild(host);
+
+  /* ================================================================
+     6) LÓGICA DEL WIDGET
+     ================================================================ */
+  const $fj = s => root.querySelector(s);
+  const launcher = $fj('.launcher'), invite = $fj('.invite'), panel = $fj('.panel'),
+        badge = $fj('.badge'), log = $fj('#fj-log'), inp = $fj('#fj-inp'),
+        form = $fj('#fj-form'), statusTxt = $fj('#fj-status'),
+        topicsBox = $fj('#fj-topics'), closeBtn = $fj('#fj-close');
+
+  const mainChar = makeChar($fj('#fj-main'), { track: true });
+  const headChar = makeChar($fj('#fj-head'), { track: true });
+
+  const state = { open: false, topic: 'general', history: [], busy: false,
+                  queue: [], unread: 0, greeted: false, chat: 'idle' };
+  let inviteT = null;
+
+  /* ---- ojos que siguen al cursor (un solo rAF para las dos instancias) ---- */
+  let px = null, py = null;
+  addEventListener('pointermove', e => { px = e.clientX; py = e.clientY; }, { passive: true });
+  if (!RM) (function eyeLoop() {
+    if (!document.hidden) chars.forEach(c => {
+      let tx = 0, ty = 0;
+      if (c.thinking) { tx = -2.6; ty = -2.3; }
+      else if (c.track && px !== null) {
+        const r = c.svg.getBoundingClientRect();
+        if (r.width > 0) {
+          tx = clamp((px - (r.left + r.width / 2)) / 140, -2.6, 2.6);
+          ty = clamp((py - (r.top + r.height * .48)) / 160, -1.9, 2.3);
+        }
+      }
+      c.ex += (tx - c.ex) * .14; c.ey += (ty - c.ey) * .14;
+      const t = `translate(${c.ex.toFixed(2)}px, ${c.ey.toFixed(2)}px)`;
+      c.pupils.forEach(p => p.style.transform = t);
+    });
+    requestAnimationFrame(eyeLoop);
+  })();
+
+  /* ---- estados visibles ---- */
+  const STATUS = { idle: 'vigilando la neblina', thinking: 'rumiando la respuesta…', talking: 'conversando…' };
+  function setChatState(s) {
+    state.chat = s;
+    panel.dataset.state = s;
+    statusTxt.textContent = STATUS[s];
+    headChar.think(s === 'thinking');
+    headChar.talk(s === 'talking');
+  }
+
+  /* ---- mensajes ---- */
+  const hora = () => new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+  const stamp = b => { const t = document.createElement('span'); t.className = 'time';
+                       t.textContent = hora(); b.appendChild(t); };
+  function scrollLog(force) {
+    const near = log.scrollHeight - log.scrollTop - log.clientHeight < 140;
+    if (force || near) log.scrollTop = log.scrollHeight;
+  }
+  function addUser(text) {
+    const b = document.createElement('div'); b.className = 'msg user'; b.textContent = text;
+    log.appendChild(b); stamp(b); scrollLog(true);
+  }
+  function notice(text) {
+    const n = document.createElement('div'); n.className = 'notice'; n.textContent = text;
+    log.appendChild(n); scrollLog(true);
+  }
+  let typingEl = null;
+  function showTyping() {
+    typingEl = document.createElement('div'); typingEl.className = 'msg bot typing';
+    typingEl.innerHTML = '<i></i><i></i><i></i>';
+    log.appendChild(typingEl); scrollLog(true);
+  }
+  const hideTyping = () => { typingEl && typingEl.remove(); typingEl = null; };
+
+  function renderSources(bubble, srcs) {
+    if (!srcs || !srcs.length) return;
+    const box = document.createElement('div'); box.className = 'srcs';
+    srcs.slice(0, 4).forEach(s => {
+      const c = document.createElement('span'); c.className = 'src';
+      const title = s.title || s.ref || 'fuente';
+      c.innerHTML = ICON_DOC + '<span>' + esc(title) + '</span>';
+      if (s.ref) c.title = s.ref;
+      box.appendChild(c);
+    });
+    bubble.appendChild(box);
+  }
+
+  function speakText(text, sources, done) {
+    setChatState('talking');
+    if (!state.open) bumpUnread();
+    const b = document.createElement('div'); b.className = 'msg bot';
+    const s = document.createElement('span'), c = document.createElement('span');
+    c.className = 'caret';
+    b.append(s, c); log.appendChild(b); scrollLog(true);
+    let i = 0;
+    const long = text.length > 170, step = long ? 2 : 1;
+    const tm = setInterval(() => {
+      i += step; s.textContent = text.slice(0, i); scrollLog();
+      if (i >= text.length) {
+        clearInterval(tm); c.remove(); stamp(b);
+        renderSources(b, sources); scrollLog(true);
+        setChatState('idle'); done && done();
+      }
+    }, long ? 24 : 20);
+  }
+
+  /* ---- flujo pregunta → RAG ---- */
+  const ERRMSG = 'Uy, caminante: la neblina se comió la señal y mi memoria (el RAG) no respondió. ' +
+                 'Revísame la conexión del endpoint y pregúntame de nuevo en un momentico.';
+  async function respond(question) {
+    state.busy = true; setChatState('thinking'); showTyping();
+    let res;
+    try {
+      res = await callRAG({ question, topic: state.topic, history: state.history.slice(-10) });
+    } catch (e) { res = { answer: ERRMSG, sources: null, error: true }; }
+    hideTyping();
+    if (!res.error) state.history.push({ role: 'assistant', content: res.answer });
+    speakText(res.answer, res.sources, () => {
+      state.busy = false;
+      if (state.queue.length) respond(state.queue.shift());
+    });
+  }
+  function send(text) {
+    addUser(text);
+    state.history.push({ role: 'user', content: text });
+    if (state.busy) state.queue.push(text); else respond(text);
+  }
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    const v = inp.value.trim(); if (!v) return;
+    inp.value = ''; send(v);
+  });
+
+  /* ---- temas (metadatos del RAG) ---- */
+  function renderTopics() {
+    topicsBox.innerHTML = '';
+    CONFIG.topics.forEach(t => {
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'topic'; b.textContent = t.label;
+      b.setAttribute('aria-pressed', String(t.id === state.topic));
+      b.addEventListener('click', () => {
+        if (state.topic === t.id) return;
+        state.topic = t.id;
+        try { localStorage.setItem('fj-topic', t.id); } catch (e) {}
+        renderTopics();
+        notice('Ahora hablamos de: ' + t.label);
+        inp.focus();
+      });
+      topicsBox.appendChild(b);
+    });
+  }
+  (function initTopic() {
+    try {
+      const saved = localStorage.getItem('fj-topic');
+      if (saved && CONFIG.topics.some(t => t.id === saved)) state.topic = saved;
+    } catch (e) {}
+    renderTopics();
+  })();
+  // Si defines topicsEndpoint, se intentan cargar los temas reales del RAG:
+  if (!CONFIG.useMock && CONFIG.topicsEndpoint) {
+    fetch(CONFIG.topicsEndpoint)
+      .then(r => r.json())
+      .then(data => {
+        const raw = data.temas || data;
+        if (!Array.isArray(raw) || !raw.length) return;
+        CONFIG.topics = raw.map(t =>
+          typeof t === 'string'
+            ? { id: t, label: t.charAt(0).toUpperCase() + t.slice(1) }
+            : { id: t.id || t.slug || t.key, label: t.label || t.nombre || t.name || t.id }
+        );
+        if (!CONFIG.topics.some(t => t.id === state.topic)) state.topic = CONFIG.topics[0].id;
+        renderTopics();
+      }).catch(() => {});
+  }
+
+  /* ---- abrir / cerrar ---- */
+  function clearUnread() { state.unread = 0; badge.hidden = true; }
+  function bumpUnread() {
+    if (state.open) return;
+    state.unread++; badge.textContent = state.unread; badge.hidden = false;
+    badge.classList.remove('pop'); void badge.offsetWidth; badge.classList.add('pop');
+    mainChar.tap();
+  }
+  function openPanel() {
+    state.open = true;
+    panel.classList.add('open');
+    launcher.setAttribute('aria-expanded', 'true');
+    invite.classList.remove('show'); clearTimeout(inviteT);
+    clearUnread(); mainChar.tap();
+    if (!state.greeted) {
+      state.greeted = true;
+      setTimeout(() => speakText(CONFIG.greeting, [], () => setChatState('idle')), 450);
+    }
+    setTimeout(() => inp.focus(), 320);
+  }
+  function closePanel() {
+    state.open = false;
+    panel.classList.remove('open');
+    launcher.setAttribute('aria-expanded', 'false');
+    launcher.focus();
+  }
+  launcher.addEventListener('click', () => state.open ? closePanel() : openPanel());
+  launcher.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); state.open ? closePanel() : openPanel(); }
+  });
+  invite.addEventListener('click', openPanel);
+  invite.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openPanel(); } });
+  closeBtn.addEventListener('click', closePanel);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && state.open) closePanel(); });
+
+  /* ---- invitación inicial ---- */
+  setTimeout(() => {
+    if (!state.open) {
+      invite.classList.add('show'); mainChar.tap();
+      inviteT = setTimeout(() => invite.classList.remove('show'), 11000);
+    }
+  }, 3500);
+})();
+
+</script>
+<!-- ================ FIN DEL WIDGET ================ -->
 </body>
 </html>
