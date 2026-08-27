@@ -533,12 +533,9 @@
   /* ================================================================
      1) CONFIGURACIÓN — lo único que tienes que tocar
      ================================================================ */
-  const CONFIG = {
-    // Tu endpoint RAG real (ajusta el dominio cuando despliegues)
-    endpoint: 'http://localhost:7860/chat',
-
-    // Endpoint GET que devuelve los temas desde tu RAG
-    topicsEndpoint: 'http://localhost:7860/temas',
+const CONFIG = {
+    endpoint: 'https://a1b2c3d4.ngrok-free.app/chat',
+    topicsEndpoint: 'https://a1b2c3d4.ngrok-free.app/temas',
 
     // Temas por defecto mientras carga /temas
     topics: [
