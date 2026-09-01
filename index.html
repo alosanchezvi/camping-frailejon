@@ -523,72 +523,58 @@
      WIDGET: FRAILEJÓN ANCIANO · chat flotante con selector de temas
      Integrado con API Guardián del Páramo (FastAPI + streaming NDJSON)
      ================================================================ -->
+<!-- ================================================================
+     WIDGET: FRAILEJÓN ANCIANO v4 · El Mago del Páramo con Barba Larga
+     ================================================================ -->
 <script>
-
 (function () {
   'use strict';
-  if (window.__frailejonWidget) return;      // evita doble instalación
+  if (window.__frailejonWidget) return;
   window.__frailejonWidget = true;
 
-  /* ================================================================
-     1) CONFIGURACIÓN — lo único que tienes que tocar
-     ================================================================ */
-const CONFIG = {
+  const CONFIG = {
     endpoint: 'https://ragguardian.onrender.com/chat',
     topicsEndpoint: 'https://ragguardian.onrender.com/temas',
-
-    // Temas por defecto mientras carga /temas
-    topics: [
-      { id: 'general', label: 'Charla libre' }
-    ],
-
-    useMock: false,   // ⇦ API real activada
+    topics: [{ id: 'general', label: 'Charla libre' }],
+    useMock: false,
     title: 'Don Frailejón',
     greeting: '¡Eh, bienvenido, caminante! Soy Don Frailejón: viejo de la ladera y contador de cosas. ' +
               'Elige un tema en la fila de abajo y pregúntame con confianza, que por estos lados ' +
               'el saber se regala y la niebla no cobra entrada.'
   };
 
-  /* ================================================================
-     2) CONEXIÓN CON TU RAG — único punto de integración
-     ================================================================ */
   async function callRAG(payload) {
     if (CONFIG.useMock || !CONFIG.endpoint) return mockRAG(payload);
     const ctrl = new AbortController();
-    const to = setTimeout(() => ctrl.abort(), 30000); // 30 s de paciencia
+    const to = setTimeout(() => ctrl.abort(), 30000);
     try {
       const r = await fetch(CONFIG.endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          pregunta: payload.question,   // tu API espera "pregunta"
-          tema: payload.topic,          // tu API espera "tema"
-          historial: payload.history    // tu API espera "historial"
+          pregunta: payload.question,
+          tema: payload.topic,
+          historial: payload.history
         }),
         signal: ctrl.signal
       });
       if (!r.ok) throw new Error('HTTP ' + r.status);
-
-      /* ---- LECTURA DEL STREAM NDJSON ---- */
       const reader = r.body.getReader();
       const decoder = new TextDecoder();
-      let buffer = '';
-      let fullAnswer = '';
-      let sources = null;
-
+      let buffer = '', fullAnswer = '', sources = null;
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split('\n');
-        buffer = lines.pop(); // última línea puede estar incompleta
+        buffer = lines.pop();
         for (const line of lines) {
           if (!line.trim()) continue;
           try {
             const obj = JSON.parse(line);
             if (obj.t !== undefined) fullAnswer += obj.t;
             if (obj.sources) sources = obj.sources;
-          } catch (e) { /* línea rara, saltamos */ }
+          } catch (e) {}
         }
       }
       if (buffer.trim()) {
@@ -603,34 +589,9 @@ const CONFIG = {
     finally { clearTimeout(to); }
   }
 
-  /* ---- Mock local para probar sin servidor (se ignora al conectar) ---- */
   const MOCK_ANSWERS = {
-    agua: [
-      { answer: 'Mire, vea: el páramo es una esponja puesta en la montaña. La turba recibe la lluvia, la deja reposar como quien guarda café, y la regala abajo clara y mansa. Un solo frailejón junta litros de agua al día entre niebla y aguacero; por eso donde hay frailejones hay río seguro todo el año.',
-        sources: [{ title: 'Ficha de manejo · Páramo de Chingaza', ref: 'parques.co/chingaza' },
-                  { title: 'Informe de cuencas 2024', ref: 'instituto-agua.co/cuencas' }] },
-      { answer: 'El secreto está en las hojas: peludas como cobija de lana, atrapan la neblina gota a gota y la dejan caer a la tierra. Abajo, la turba —que es tierra de siglos— la guarda como quien guarda plata, y después la entrega a los ríos que beben los pueblos. No es magia: es paciencia con hojas.',
-        sources: [{ title: 'Manual del páramo andino', ref: 'eco-libros.co/paramo' }] }
-    ],
-    biodiversidad: [
-      { answer: 'Aquí conviven el oso de anteojos, el cóndor, el conejo sabanero y ranas que no se ven en ningún otro rincón del mundo. El páramo es un pueblo chiquito de especies únicas: cada cual con su oficio. Cuidar una sola de ellas es cuidar la casa completa, mijo.',
-        sources: [{ title: 'Catálogo de flora y fauna de altura', ref: 'biodiversidad.co/paramo' }] }
-    ],
-    clima: [
-      { answer: 'Acá arriba el clima cambia de humor tres veces al día: sol, llovizna y helada, a veces las tres en una hora. Mis hojas son mi ruana: guardan agua y aguantan frío. Pero si la temperatura sube, la neblina se va y la esponja se seca… y eso lo pagamos todos los que viven abajo.',
-        sources: [{ title: 'Monitoreo climático del páramo 2024', ref: 'clima-andino.co/paramos' }] }
-    ],
-    cultura: [
-      { answer: 'Los campesinos y yo llevamos siglos de ser vecinos: ellos saben leer las nubes y yo sé dónde nace el agua. Del páramo han salido remedios, canciones y la costumbre del agua de panela con queso. Eso es saber antiguo, de los que no se gastan.',
-        sources: [{ title: 'Memorias campesinas del altiplano', ref: 'cultura-rural.co/memorias' }] }
-    ],
-    conservacion: [
-      { answer: 'Pa\u2019 cuidarme no hay ciencia rara: no me queme, no me pise, y deje descansar la tierra. Un frailejón tarda decenas de años en crecer un metro; destruirnos es fácil, devolvernos no. Sembrar árboles de clima frío, dejar que la neblina trabaje y no abrir zanjas: eso sí es restaurar.',
-        sources: [{ title: 'Guía de restauración de páramos', ref: 'restaurar.co/paramos' }] }
-    ],
-    general: [
-      { answer: 'Por aquí el saber se regala, caminante. Pregúnteme del agua, del frío, de los animales o de la gente de la ladera. O lléveme una perla: «no hay neblina que dure cien años, ni paso apurado que la evite; camine tranquilo y con abrigo».', sources: [] }
-    ]
+    agua: [{ answer: 'Mire, vea: el páramo es una esponja...', sources: [] }],
+    general: [{ answer: 'Por aquí el saber se regala, caminante...', sources: [] }]
   };
   async function mockRAG({ topic }) {
     await new Promise(r => setTimeout(r, 750 + Math.random() * 650));
@@ -638,16 +599,11 @@ const CONFIG = {
     return { ...set[Math.floor(Math.random() * set.length)] };
   }
 
-  /* ================================================================
-     3) UTILIDADES
-     ================================================================ */
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
   const pick = a => a[Math.floor(Math.random() * a.length)];
-  const esc = s => String(s).replace(/[&<>"']/g, m =>
-    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  const esc = s => String(s).replace(/[&<>"']/g, m => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[m]));
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Fuentes (se auto-inyectan una sola vez; dentro del Shadow DOM se heredan bien)
   if (!document.getElementById('fj-fonts')) {
     const l = document.createElement('link');
     l.id = 'fj-fonts'; l.rel = 'stylesheet';
@@ -659,101 +615,232 @@ const CONFIG = {
   const ICON_SEND  = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.6 20.4 21 12 3.6 3.6 3.6 10l12 2-12 2z"/></svg>';
   const ICON_DOC   = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M7 3h7l4 4v14H7z"/><path d="M14 3v4h4"/></svg>';
 
-  /* ================================================================
-     4) EL PERSONAJE — frailejón anciano en SVG (reutilizable)
-     ================================================================ */
   const MOUTH = {
-    smile: 'M52.5 72.5 Q60 78.5 67.5 72.5 Q60 75.8 52.5 72.5 Z',
-    open : 'M53.5 71.5 Q60 81 66.5 71.5 Q60 74.5 53.5 71.5 Z',
-    mid  : 'M53.5 72 Q60 76 66.5 72 Q60 74 53.5 72 Z'
+    smile: 'M94 142 Q100 147 106 142 Q100 144 94 142 Z',
+    open : 'M93 141 Q100 150 107 141 Q100 143 93 141 Z',
+    mid  : 'M94 142 Q100 145 106 142 Q100 143 94 142 Z'
   };
 
   function charSVG(uid) {
-    const leaf = (a, len, w, fill, inner) => {
-      const d = `M0 4 C ${w} ${-len * .28} ${w * .9} ${-len * .78} 0 ${-len} C ${-w * .9} ${-len * .78} ${-w} ${-len * .28} 0 4 Z`;
-      return `<g transform="translate(60 66) rotate(${a})">
-        <path d="${d}" fill="${fill}" stroke="${inner ? '#7c9a72' : '#5c7d58'}" stroke-width="${inner ? 1 : 1.4}"/>
-        <path d="${d}" fill="none" stroke="#e2ecc4" stroke-width="1.2" stroke-dasharray="1.4 4.6"
-              stroke-linecap="round" transform="scale(1.14)" opacity=".95"/>
-      </g>`;
-    };
-    let leaves = '';
-    [[-115,27,7,'#7fa379'],[-82,34,8.5,'#8cae7f'],[-52,33,8,'#76996f'],[-26,35,8.5,'#7fa379'],
-     [0,36,9,'#8cae7f'],[26,35,8.5,'#76996f'],[52,33,8,'#7fa379'],[82,34,8.5,'#8cae7f'],[115,27,7,'#76996f']]
-      .forEach(([a,l,w,c]) => leaves += leaf(a,l,w,c,false));
-    [[-38,21,5.5,'#9cb88a'],[-13,23,6,'#a9c49a'],[13,23,6,'#9cb88a'],[38,21,5.5,'#a9c49a']]
-      .forEach(([a,l,w,c]) => leaves += leaf(a,l,w,c,true));
-
-    let petals = '';
-    for (let i = 0; i < 8; i++)
-      petals += `<ellipse rx="2.7" ry="6.2" cy="-6.6" transform="rotate(${i * 45})"
-                  fill="${i % 2 ? '#eeaa2e' : '#f2b53a'}" stroke="#d18f22" stroke-width=".7"/>`;
-
-    const skirt = [[50,-14,'#a5834f'],[57,-5,'#b99a72'],[64,4,'#96754c'],[71,12,'#a8875b']]
-      .map(([x, r, c]) => `<g transform="translate(${x} 86) rotate(${r})">
-        <path d="M0 0 C3 6 3 11 0 15 C-3 11 -3 6 0 0Z" fill="${c}" stroke="#7c613f" stroke-width=".7"/></g>`).join('');
-
-    const brow = (cls, d) => `<g class="c-brow ${cls}">
-      <path d="${d}" fill="none" stroke="#e7e2cf" stroke-width="5.6" stroke-linecap="round"/>
-      <path d="${d}" fill="none" stroke="#cfc9ae" stroke-width="5.6" stroke-linecap="round" stroke-dasharray="0.6 3.3"/>
-    </g>`;
-    const eye = (cx, clip) => `<g class="c-eye">
-      <circle cx="${cx}" cy="58" r="6.8" fill="#fdfbf1" stroke="#39342b" stroke-width="1.5"/>
-      <g class="c-pupil">
-        <circle cx="${cx}" cy="58" r="3.5" fill="#2f2b24"/>
-        <circle cx="${cx - 1.4}" cy="56.6" r="1.25" fill="#fff"/>
-        <circle cx="${cx + 1.7}" cy="59.4" r=".7" fill="#fff" opacity=".8"/>
-      </g>
-      <g class="c-lid" clip-path="url(#${clip})"><rect x="${cx - 9}" y="49" width="18" height="18" fill="#e9edd3"/></g>
-    </g>`;
-
-    return `<svg class="fj" viewBox="0 0 120 120" aria-hidden="true">
+    return `<svg class="fj" viewBox="0 0 200 280" aria-hidden="true" style="overflow:visible">
       <defs>
-        <clipPath id="fjL${uid}"><circle cx="50" cy="58" r="6.8"/></clipPath>
-        <clipPath id="fjR${uid}"><circle cx="70" cy="58" r="6.8"/></clipPath>
+        <radialGradient id="bodyGrad${uid}" cx="45%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="#c49a6c"/>
+          <stop offset="40%" stop-color="#a07850"/>
+          <stop offset="80%" stop-color="#7a5a3a"/>
+          <stop offset="100%" stop-color="#5a4030"/>
+        </radialGradient>
+        <radialGradient id="bodyDark${uid}" cx="55%" cy="60%" r="50%">
+          <stop offset="0%" stop-color="#8a6848"/>
+          <stop offset="100%" stop-color="#5a4030"/>
+        </radialGradient>
+        <linearGradient id="leafG1${uid}" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#4a6b3a"/>
+          <stop offset="50%" stop-color="#7aa85e"/>
+          <stop offset="100%" stop-color="#a8d888"/>
+        </linearGradient>
+        <linearGradient id="leafG2${uid}" x1="0%" y1="100%" x2="0%" y2="0%">
+          <stop offset="0%" stop-color="#3f5d30"/>
+          <stop offset="60%" stop-color="#6b9a52"/>
+          <stop offset="100%" stop-color="#96c878"/>
+        </linearGradient>
+        <radialGradient id="gemGrad${uid}" cx="35%" cy="35%" r="55%">
+          <stop offset="0%" stop-color="#b2ebf2"/>
+          <stop offset="40%" stop-color="#4dd0e1"/>
+          <stop offset="80%" stop-color="#00838f"/>
+          <stop offset="100%" stop-color="#006064"/>
+        </radialGradient>
+        <radialGradient id="gemInn${uid}" cx="30%" cy="30%" r="40%">
+          <stop offset="0%" stop-color="#e0f7fa"/>
+          <stop offset="100%" stop-color="#4dd0e1" stop-opacity="0"/>
+        </radialGradient>
+        <linearGradient id="mustG${uid}" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#fdfbf5"/>
+          <stop offset="60%" stop-color="#f0e8d0"/>
+          <stop offset="100%" stop-color="#d8ccb0"/>
+        </linearGradient>
+        <linearGradient id="beardG${uid}" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#fdfbf5"/>
+          <stop offset="30%" stop-color="#f5f0e0"/>
+          <stop offset="70%" stop-color="#e8dcc8"/>
+          <stop offset="100%" stop-color="#d4c8b0"/>
+        </linearGradient>
+        <radialGradient id="chestEye${uid}" cx="40%" cy="40%" r="50%">
+          <stop offset="0%" stop-color="#a5d6a7"/>
+          <stop offset="70%" stop-color="#4caf50"/>
+          <stop offset="100%" stop-color="#2e7d32"/>
+        </radialGradient>
+        <radialGradient id="eyeGrad${uid}" cx="45%" cy="40%" r="50%">
+          <stop offset="0%" stop-color="#5a4a3a"/>
+          <stop offset="100%" stop-color="#2a1f18"/>
+        </radialGradient>
+        <filter id="shad${uid}" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#1a0f0a" flood-opacity="0.3"/>
+        </filter>
+        <filter id="mistF${uid}"><feGaussianBlur stdDeviation="4"/></filter>
+        <filter id="glowF${uid}">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <clipPath id="eyeL${uid}"><ellipse cx="82" cy="112" rx="12" ry="14"/></clipPath>
+        <clipPath id="eyeR${uid}"><ellipse cx="118" cy="113" rx="12" ry="14"/></clipPath>
       </defs>
-      <g class="c-root">
-        <ellipse cx="60" cy="112.5" rx="25" ry="5.5" fill="#628a63"/>
-        <g class="c-leaves">${leaves}</g>
-        <g class="c-cane">
-          <path d="M28 108 C28 88 29 70 28 57 C28 50 22.5 47.5 18.8 51.5 C17 53.5 17.2 56.5 19.2 58.2"
-                fill="none" stroke="#6d4b2e" stroke-width="5" stroke-linecap="round"/>
-          <path d="M26.8 66 C26.2 76 27.2 90 26.8 104" fill="none" stroke="#8a6a45" stroke-width="1.6" opacity=".8"/>
-          <path d="M25.6 62 C22.8 66 25.6 70 22.8 74" fill="none" stroke="#c2603f" stroke-width="2.4" stroke-linecap="round"/>
-          <path d="M27.8 62 C30.6 66 27.8 70 30.4 73" fill="none" stroke="#a9532f" stroke-width="2.4" stroke-linecap="round"/>
-        </g>
-        <path d="M48 85 C49 95 47.5 105 45 114 L79 114 C76.5 105 75.5 95 77 85 C71.5 82.5 53.5 82.5 48 85 Z" fill="#84684b"/>
-        <path d="M57 88 C57 96 56 104 55 112" stroke="#6a5138" stroke-width="1.3" fill="none" opacity=".45"/>
-        <path d="M66 88 C67 96 68 104 69 112" stroke="#9a7c5c" stroke-width="2.4" fill="none" opacity=".55"/>
-        ${skirt}
-        <path d="M50 93.5 C43 91 35 91.5 30 94.5" fill="none" stroke="#6f9370" stroke-width="3.6" stroke-linecap="round"/>
-        <circle cx="29" cy="95" r="3.8" fill="#7fa379" stroke="#597c56" stroke-width=".9"/>
-        <g class="c-head">
-          <ellipse cx="60" cy="63" rx="26" ry="23" fill="#e9edd3"/>
-          <g fill="none" stroke="#ece8d8" stroke-width="1.7" stroke-linecap="round" opacity=".95">
-            <path d="M52.5 81 C51.5 85 52.5 88.5 50.5 91.5"/>
-            <path d="M60 83 C60 88 60 91 60 94"/>
-            <path d="M67.5 81 C68.5 85 67.5 88.5 69.5 91.5"/>
-            <path d="M47 76 C44 80 43.5 84.5 45.5 88"/>
-            <path d="M73 76 C76 80 76.5 84.5 74.5 88"/>
-          </g>
-          ${brow('bl', 'M41.5 48 C45 44.2 50.2 44.2 53.8 47')}
-          ${brow('br', 'M66.2 47 C69.8 44.2 75 44.2 78.5 48')}
-          ${eye(50, 'fjL' + uid)}
-          ${eye(70, 'fjR' + uid)}
-          <ellipse cx="60" cy="65.5" rx="3.4" ry="2.6" fill="#dde3bd" stroke="#c2cb9a" stroke-width="1"/>
-          <ellipse cx="45" cy="66.5" rx="4" ry="2.4" fill="#d79a78" opacity=".33"/>
-          <ellipse cx="75" cy="66.5" rx="4" ry="2.4" fill="#d79a78" opacity=".33"/>
-          <path class="c-mouth" d="${MOUTH.smile}" fill="#46402f"/>
-          <g transform="translate(84.5 45.5) rotate(14)"><g class="c-fl">${petals}
-            <circle r="2.7" fill="#b06e1f"/><circle cx="-.9" cy="-.9" r=".9" fill="#e0913c"/>
-          </g></g>
+
+      <ellipse cx="100" cy="258" rx="55" ry="10" fill="#0f1a0f" opacity="0.35"/>
+
+      <g class="c-mist" opacity="0">
+        <ellipse cx="40" cy="220" rx="25" ry="12" fill="#a8c4a0" filter="url(#mistF${uid})" opacity="0.3"/>
+      </g>
+      <g class="c-mist" opacity="0">
+        <ellipse cx="160" cy="200" rx="20" ry="10" fill="#a8c4a0" filter="url(#mistF${uid})" opacity="0.25"/>
+      </g>
+      <g class="c-mist" opacity="0">
+        <ellipse cx="100" cy="50" rx="30" ry="15" fill="#c8e0c0" filter="url(#mistF${uid})" opacity="0.2"/>
+      </g>
+
+      <circle cx="45" cy="80" r="2" fill="#4dd0e1" opacity="0.5">
+        <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="80;70;80" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="155" cy="100" r="1.5" fill="#a5d6a7" opacity="0.4">
+        <animate attributeName="opacity" values="0.1;0.5;0.1" dur="4s" repeatCount="indefinite"/>
+        <animate attributeName="cy" values="100;90;100" dur="4s" repeatCount="indefinite"/>
+      </circle>
+
+      <ellipse cx="58" cy="175" rx="16" ry="22" fill="url(#bodyDark${uid})" transform="rotate(-15 58 175)"/>
+
+      <g>
+        <path d="M152 150 Q148 190 145 240 Q144 252 142 260" fill="none" stroke="#3e2723" stroke-width="5" stroke-linecap="round"/>
+        <path d="M152 150 Q148 190 145 240" fill="none" stroke="#5d4037" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+        <circle cx="149" cy="175" r="2.5" fill="#2e1c15" opacity="0.6"/>
+        <circle cx="147.5" cy="205" r="2" fill="#2e1c15" opacity="0.5"/>
+        <g class="c-gem" transform="translate(152,138)">
+          <polygon points="0,-10 8.7,-5 8.7,5 0,10 -8.7,5 -8.7,-5" fill="url(#gemGrad${uid})" stroke="#80deea" stroke-width="0.8"/>
+          <polygon points="0,-6 5.2,-3 5.2,3 0,6 -5.2,3 -5.2,-3" fill="url(#gemInn${uid})"/>
+          <circle cx="-3" cy="-3" r="1.5" fill="#fff" opacity="0.7"/>
+          <line x1="0" y1="-14" x2="0" y2="-18" stroke="#4dd0e1" stroke-width="1" opacity="0.6"/>
+          <line x1="12" y1="-7" x2="15" y2="-9" stroke="#4dd0e1" stroke-width="1" opacity="0.6"/>
+          <line x1="12" y1="7" x2="15" y2="9" stroke="#4dd0e1" stroke-width="1" opacity="0.6"/>
         </g>
       </g>
+
+      <g class="c-root" filter="url(#shad${uid})">
+        <path d="M100 108 C124 108 138 126 140 148 C142 170 144 195 136 218 C130 238 116 248 100 248 C84 248 70 238 64 218 C56 195 58 170 60 148 C62 126 76 108 100 108 Z" fill="url(#bodyGrad${uid})"/>
+        <path d="M100 108 C124 108 138 126 140 148 C142 170 144 195 136 218 C130 238 116 248 100 248 L100 108 Z" fill="url(#bodyDark${uid})" opacity="0.4"/>
+        <ellipse cx="85" cy="140" rx="15" ry="10" fill="#b08a60" opacity="0.15"/>
+        <ellipse cx="115" cy="160" rx="12" ry="8" fill="#8a6848" opacity="0.1"/>
+        <ellipse cx="90" cy="120" rx="18" ry="10" fill="#d4b898" opacity="0.25" transform="rotate(-15 90 120)"/>
+      </g>
+
+      <g class="c-chest" filter="url(#glowF${uid})">
+        <ellipse cx="88" cy="185" rx="7" ry="5" fill="url(#chestEye${uid})" stroke="#2e7d32" stroke-width="0.8"/>
+        <ellipse cx="88" cy="183.5" rx="2.5" ry="1.8" fill="#a5d6a7" opacity="0.8"/>
+        <ellipse cx="112" cy="195" rx="6" ry="4.5" fill="url(#chestEye${uid})" stroke="#2e7d32" stroke-width="0.8"/>
+        <ellipse cx="112" cy="193.8" rx="2" ry="1.5" fill="#a5d6a7" opacity="0.8"/>
+      </g>
+
+      <ellipse cx="142" cy="172" rx="15" ry="20" fill="url(#bodyGrad${uid})" transform="rotate(10 142 172)"/>
+      <ellipse cx="148" cy="158" rx="10" ry="12" fill="url(#bodyGrad${uid})" transform="rotate(25 148 158)"/>
+
+      <!-- ========== BARBA LARGA ========== -->
+      <g class="c-beard" filter="url(#shad${uid})">
+        <path d="M96 138 C94 155 92 175 95 195 C96 205 98 210 100 210 C102 210 104 205 105 195 C108 175 106 155 104 138 Z" fill="url(#beardG${uid})" opacity="0.95"/>
+        <path d="M98 140 C97 160 96 180 98 200" fill="none" stroke="#e8dcc8" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+        <path d="M92 136 C84 148 78 168 80 188 C81 198 84 204 87 202 C90 200 91 192 90 182 C88 165 90 148 94 136 Z" fill="url(#beardG${uid})" opacity="0.9"/>
+        <path d="M88 145 Q82 165 84 190" fill="none" stroke="#e8dcc8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <path d="M108 136 C116 148 122 168 120 188 C119 198 116 204 113 202 C110 200 109 192 110 182 C112 165 110 148 106 136 Z" fill="url(#beardG${uid})" opacity="0.9"/>
+        <path d="M112 145 Q118 165 116 190" fill="none" stroke="#e8dcc8" stroke-width="1.2" stroke-linecap="round" opacity="0.5"/>
+        <path d="M88 134 C78 146 72 170 75 192 C76 200 79 205 82 203 C85 201 86 194 84 184 C82 168 84 150 90 134 Z" fill="url(#beardG${uid})" opacity="0.85"/>
+        <path d="M82 148 Q76 172 78 195" fill="none" stroke="#e8dcc8" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+        <path d="M112 134 C122 146 128 170 125 192 C124 200 121 205 118 203 C115 201 114 194 116 184 C118 168 116 150 110 134 Z" fill="url(#beardG${uid})" opacity="0.85"/>
+        <path d="M118 148 Q124 172 122 195" fill="none" stroke="#e8dcc8" stroke-width="1" stroke-linecap="round" opacity="0.4"/>
+        <path d="M98 140 C96 158 94 178 97 198 C98 206 100 208 100 208 C100 208 102 206 103 198 C106 178 104 158 102 140 Z" fill="#f0e8d0" opacity="0.7"/>
+        <path d="M95 205 Q93 212 96 215" fill="none" stroke="#d4c8b0" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <path d="M105 205 Q107 212 104 215" fill="none" stroke="#d4c8b0" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
+        <path d="M85 200 Q82 208 85 210" fill="none" stroke="#d4c8b0" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+        <path d="M115 200 Q118 208 115 210" fill="none" stroke="#d4c8b0" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+      </g>
+
+      <g filter="url(#shad${uid})">
+        <path d="M96 134 C88 138 78 148 74 162 C71 172 73 182 78 188 C82 192 86 188 88 180 C90 170 92 158 94 148 C95 142 97 138 96 134 Z" fill="url(#mustG${uid})"/>
+        <path d="M104 134 C112 138 122 148 126 162 C129 172 127 182 122 188 C118 192 114 188 112 180 C110 170 108 158 106 148 C105 142 103 138 104 134 Z" fill="url(#mustG${uid})"/>
+        <path d="M90 142 Q82 155 80 170" fill="none" stroke="#e8e0c8" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+        <path d="M86 140 Q76 152 76 168" fill="none" stroke="#f5f0e0" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+        <path d="M110 142 Q118 155 120 170" fill="none" stroke="#e8e0c8" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+        <path d="M114 140 Q124 152 124 168" fill="none" stroke="#f5f0e0" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+      </g>
+
+      <ellipse cx="100" cy="132" rx="5" ry="4" fill="#3e2723" opacity="0.9"/>
+      <ellipse cx="99" cy="131" rx="1.5" ry="1" fill="#6d4c41" opacity="0.5"/>
+
+      <g>
+        <ellipse cx="82" cy="112" rx="13" ry="15" fill="#fdfbf1" stroke="#3e2723" stroke-width="1.2" filter="url(#shad${uid})"/>
+        <g clip-path="url(#eyeL${uid})">
+          <ellipse cx="82" cy="112" rx="7" ry="8" fill="url(#eyeGrad${uid})"/>
+          <circle cx="79" cy="109" r="2.5" fill="#fff" opacity="0.9"/>
+          <circle cx="84" cy="114" r="1.2" fill="#fff" opacity="0.6"/>
+          <rect x="68" y="95" width="28" height="14" fill="#c49a6c" opacity="0.85"/>
+          <path d="M68 109 Q82 104 96 109" fill="none" stroke="#a07850" stroke-width="1.5"/>
+        </g>
+        <g class="c-lid" clip-path="url(#eyeL${uid})">
+          <rect x="68" y="95" width="28" height="28" fill="#c49a6c"/>
+          <path d="M68 109 Q82 104 96 109" fill="none" stroke="#8a6848" stroke-width="1"/>
+        </g>
+        <ellipse cx="82" cy="128" rx="8" ry="3" fill="#5a4030" opacity="0.2"/>
+      </g>
+
+      <g>
+        <ellipse cx="118" cy="113" rx="13" ry="15" fill="#fdfbf1" stroke="#3e2723" stroke-width="1.2" filter="url(#shad${uid})"/>
+        <g clip-path="url(#eyeR${uid})">
+          <ellipse cx="118" cy="113" rx="7" ry="8" fill="url(#eyeGrad${uid})"/>
+          <circle cx="115" cy="110" r="2.5" fill="#fff" opacity="0.9"/>
+          <circle cx="120" cy="115" r="1.2" fill="#fff" opacity="0.6"/>
+          <rect x="104" y="96" width="28" height="15" fill="#c49a6c" opacity="0.9"/>
+          <path d="M104 111 Q118 105 132 111" fill="none" stroke="#a07850" stroke-width="1.5"/>
+        </g>
+        <g class="c-lid" clip-path="url(#eyeR${uid})">
+          <rect x="104" y="96" width="28" height="28" fill="#c49a6c"/>
+          <path d="M104 111 Q118 105 132 111" fill="none" stroke="#8a6848" stroke-width="1"/>
+        </g>
+        <ellipse cx="118" cy="129" rx="8" ry="3" fill="#5a4030" opacity="0.2"/>
+      </g>
+
+      <path d="M70 100 Q82 94 92 100" fill="none" stroke="#f5f0e0" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+      <path d="M72 98 Q82 93 90 98" fill="none" stroke="#e8e0c8" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+      <path d="M108 101 Q118 95 130 101" fill="none" stroke="#f5f0e0" stroke-width="4" stroke-linecap="round" opacity="0.9"/>
+      <path d="M110 99 Q118 94 128 99" fill="none" stroke="#e8e0c8" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
+
+      <g class="c-leaf">
+        <path d="M100 108 C108 98 110 75 104 58 C100 50 100 50 96 58 C90 75 92 98 100 108 Z" fill="url(#leafG1${uid})" stroke="#4a6b3a" stroke-width="0.8"/>
+        <path d="M100 108 L100 58" stroke="#a8d888" stroke-width="1" opacity="0.5"/>
+      </g>
+      <g class="c-leaf">
+        <path d="M100 108 C115 102 128 82 126 62 C124 54 120 52 116 58 C106 72 100 92 100 108 Z" fill="url(#leafG2${uid})" stroke="#4a6b3a" stroke-width="0.8" transform="rotate(28 100 108)"/>
+      </g>
+      <g class="c-leaf">
+        <path d="M100 108 C120 108 138 92 140 72 C142 64 138 60 132 64 C118 74 108 90 100 108 Z" fill="url(#leafG1${uid})" stroke="#4a6b3a" stroke-width="0.8" transform="rotate(55 100 108)"/>
+      </g>
+      <g class="c-leaf">
+        <path d="M100 108 C85 102 72 82 74 62 C76 54 80 52 84 58 C94 72 100 92 100 108 Z" fill="url(#leafG2${uid})" stroke="#4a6b3a" stroke-width="0.8" transform="rotate(-28 100 108)"/>
+      </g>
+      <g class="c-leaf">
+        <path d="M100 108 C80 108 62 92 60 72 C58 64 62 60 68 64 C82 74 92 90 100 108 Z" fill="url(#leafG1${uid})" stroke="#4a6b3a" stroke-width="0.8" transform="rotate(-55 100 108)"/>
+      </g>
+      <g class="c-leaf">
+        <path d="M100 108 C112 100 122 78 118 60 C116 52 112 50 108 56 C100 70 96 88 100 108 Z" fill="url(#leafG2${uid})" stroke="#4a6b3a" stroke-width="0.8" transform="rotate(42 100 108)"/>
+      </g>
+      <g class="c-leaf">
+        <path d="M100 108 C88 100 78 78 82 60 C84 52 88 50 92 56 C100 70 104 88 100 108 Z" fill="url(#leafG2${uid})" stroke="#4a6b3a" stroke-width="0.8" transform="rotate(-42 100 108)"/>
+      </g>
+
+      <g transform="translate(100,52)"><circle r="3" fill="#f2b53a" opacity="0.9"/><circle r="1.5" fill="#eeaa2e"/></g>
+      <g transform="translate(130,68) rotate(20)"><circle r="2.5" fill="#f2b53a" opacity="0.85"/></g>
+      <g transform="translate(70,68) rotate(-20)"><circle r="2.5" fill="#f2b53a" opacity="0.85"/></g>
+
+      <path class="c-mouth" d="${MOUTH.smile}" fill="#3e2723"/>
     </svg>`;
   }
 
-  /* ---- Instancia de personaje con API: blink / talk / think / tap / ojos ---- */
   const chars = [];
   function makeChar(container, opts = {}) {
     const uid = Math.random().toString(36).slice(2, 7);
@@ -764,7 +851,7 @@ const CONFIG = {
     const api = {
       track: !!opts.track, thinking: false, ex: 0, ey: 0, _t: null, svg, pupils,
       blink() { svg.classList.add('blink'); setTimeout(() => svg.classList.remove('blink'), 240); },
-      setMouth(m) { mouthEl.setAttribute('d', MOUTH[m]); },
+      setMouth(m) { if (mouthEl) mouthEl.setAttribute('d', MOUTH[m]); },
       talk(on) {
         clearInterval(api._t);
         if (on) api._t = setInterval(() => api.setMouth(pick(['open', 'mid', 'open', 'smile'])), 115);
@@ -784,9 +871,6 @@ const CONFIG = {
     return api;
   }
 
-  /* ================================================================
-     5) MONTAJE EN SHADOW DOM (aislado del CSS de tu página)
-     ================================================================ */
   const host = document.createElement('div');
   host.id = 'frailejon-widget';
   const root = host.attachShadow({ mode: 'open' });
@@ -798,42 +882,58 @@ const CONFIG = {
     *{ box-sizing:border-box; margin:0; }
     button{ font-family:inherit; cursor:pointer; }
 
-    /* ---------- personaje ---------- */
-    .fj{ width:100%; height:100%; display:block; user-select:none; }
+    .fj{ width:100%; height:100%; display:block; user-select:none; overflow:visible; }
     .c-root{ transform-box:fill-box; transform-origin:50% 100%;
-             animation:fjidle 5s ease-in-out infinite alternate; }
-    @keyframes fjidle{ from{ transform:rotate(-1.1deg);} to{ transform:rotate(1.1deg);} }
+             animation:fjfloat 4s ease-in-out infinite; }
+    @keyframes fjfloat{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-5px);} }
     .c-head{ transform-box:fill-box; transform-origin:50% 88%; transition:transform .45s cubic-bezier(.34,1.5,.55,1); }
-    .fj.think .c-head{ transform:rotate(-4.5deg); }
+    .fj.think .c-root{ animation:fjthink 6s ease-in-out infinite; }
+    @keyframes fjthink{ 0%,100%{ transform:translateY(0) rotate(0);} 50%{ transform:translateY(-3px) rotate(-2deg);} }
     .c-brow{ transform-box:fill-box; transition:transform .4s cubic-bezier(.34,1.5,.55,1); }
-    .c-brow.bl{ transform-origin:95% 60%; } .c-brow.br{ transform-origin:5% 60%; }
-    .fj.think .c-brow.bl{ transform:rotate(11deg) translateY(1.2px); }
-    .fj.think .c-brow.br{ transform:rotate(-11deg) translateY(1.2px); }
-    .c-lid{ transform:translateY(-17px); }
+    .fj.think .c-brow{ transform:translateY(2px); }
+    .c-lid{ transform:translateY(-16px); transition:transform .15s ease; }
     .fj.blink .c-lid{ animation:fjblink .22s ease; }
     @keyframes fjblink{ 40%,60%{ transform:translateY(0);} }
     .c-cane{ transform-box:fill-box; transform-origin:30% 95%; }
     .fj.tap .c-cane{ animation:fjtap .5s ease-out; }
     @keyframes fjtap{ 25%{ transform:rotate(4.5deg);} 55%{ transform:rotate(-1deg);} 80%{ transform:rotate(2deg);} }
+    .c-leaf{ transform-box:fill-box; transform-origin:100px 108px; animation:fjleaf 5s ease-in-out infinite; }
+    .c-leaf:nth-child(2){ animation-delay:-0.5s; }
+    .c-leaf:nth-child(3){ animation-delay:-1s; }
+    .c-leaf:nth-child(4){ animation-delay:-1.5s; }
+    .c-leaf:nth-child(5){ animation-delay:-2s; }
+    .c-leaf:nth-child(6){ animation-delay:-2.5s; }
+    .c-leaf:nth-child(7){ animation-delay:-3s; }
+    @keyframes fjleaf{ 0%,100%{ transform:rotate(0deg);} 50%{ transform:rotate(1.5deg);} }
+    .c-mist{ animation:fjmist 10s ease-in-out infinite; }
+    .c-mist:nth-of-type(2){ animation-delay:-3.5s; }
+    .c-mist:nth-of-type(3){ animation-delay:-7s; }
+    @keyframes fjmist{ 0%{ opacity:0; transform:translateX(-8px) scale(0.9);} 40%{ opacity:0.3;} 100%{ opacity:0; transform:translateX(25px) scale(1.2);} }
+    .c-gem{ animation:fjgem 2.5s ease-in-out infinite; }
+    @keyframes fjgem{ 0%,100%{ filter:drop-shadow(0 0 2px #4dd0e1) drop-shadow(0 0 6px #4dd0e1);} 50%{ filter:drop-shadow(0 0 5px #4dd0e1) drop-shadow(0 0 12px #4dd0e1);} }
+    .c-chest{ animation:fjchest 3s ease-in-out infinite; }
+    @keyframes fjchest{ 0%,100%{ opacity:0.7;} 50%{ opacity:1;} }
+    .c-beard{ animation:fjbeard 4s ease-in-out infinite; transform-origin:100px 140px; }
+    @keyframes fjbeard{ 0%,100%{ transform:rotate(0deg);} 50%{ transform:rotate(0.8deg);} }
 
-    /* ---------- botón flotante ---------- */
-    .launcher{ position:absolute; right:0; bottom:0; width:88px; height:88px; border-radius:50%;
+    .launcher:hover .c-root{ animation-duration:2s; }
+    .launcher:hover .c-head{ transform:rotate(4deg) !important; }
+
+    .launcher{ position:absolute; right:0; bottom:0; width:92px; height:92px; border-radius:50%;
       background:#f7f2e2; border:1.5px solid #d9cdb0; pointer-events:auto; cursor:pointer;
       box-shadow:0 12px 28px -10px rgba(40,58,38,.5);
       transition:transform .25s cubic-bezier(.34,1.5,.5,1), box-shadow .2s; }
     .launcher:hover{ transform:translateY(-4px) scale(1.04); box-shadow:0 18px 34px -12px rgba(40,58,38,.55); }
-    .launcher:hover .c-head{ transform:rotate(4.5deg); }
     .launcher:active{ transform:scale(.94); }
     .launcher:focus-visible{ outline:2.5px dashed #6f9370; outline-offset:4px; }
-    .launcher .char{ position:absolute; inset:5px 4px 4px; pointer-events:none; }
+    .launcher .char{ position:absolute; inset:2px 2px 6px; pointer-events:none; }
     .badge{ position:absolute; top:0; right:-2px; min-width:22px; height:22px; padding:0 5px;
       border-radius:11px; background:#c2603f; color:#fdf6e8; border:2px solid #f7f2e2;
       font:700 12px/19px Karla,sans-serif; text-align:center; box-shadow:0 3px 8px rgba(0,0,0,.22); }
     .badge.pop{ animation:fjpop .45s cubic-bezier(.34,1.8,.5,1); }
     @keyframes fjpop{ from{ transform:scale(0);} }
 
-    /* ---------- burbuja de invitación ---------- */
-    .invite{ position:absolute; right:100px; bottom:24px; max-width:215px; background:#f7f2e2;
+    .invite{ position:absolute; right:104px; bottom:24px; max-width:215px; background:#f7f2e2;
       border:1.5px solid #d9cdb0; border-radius:14px 14px 4px 14px; padding:10px 13px;
       font-size:13.5px; line-height:1.45; color:#37402c; pointer-events:auto; cursor:pointer;
       box-shadow:0 12px 28px -12px rgba(40,58,38,.45);
@@ -845,9 +945,8 @@ const CONFIG = {
       transform:rotate(45deg); }
     .invite:focus-visible{ outline:2.5px dashed #6f9370; outline-offset:3px; }
 
-    /* ---------- panel ---------- */
-    .panel{ position:absolute; right:0; bottom:104px; width:min(382px, calc(100vw - 24px));
-      height:min(566px, calc(100dvh - 132px)); min-height:380px; display:flex; flex-direction:column;
+    .panel{ position:absolute; right:0; bottom:108px; width:min(382px, calc(100vw - 24px));
+      height:min(566px, calc(100dvh - 136px)); min-height:380px; display:flex; flex-direction:column;
       background:#f7f2e2; border:1.5px solid #d9cdb0; border-radius:18px; overflow:hidden;
       box-shadow:0 30px 70px -25px rgba(35,52,32,.5); pointer-events:auto;
       transform-origin:100% 100%; opacity:0; visibility:hidden;
@@ -871,7 +970,6 @@ const CONFIG = {
     .iconbtn svg{ width:17px; height:17px; }
     .iconbtn:focus-visible{ outline:2px dashed #6f9370; outline-offset:2px; }
 
-    /* ---------- temas ---------- */
     .topics{ display:flex; gap:7px; padding:9px 12px; overflow-x:auto; flex:none;
       background:#f5efdd; border-bottom:1px solid #e6dcc0; scrollbar-width:thin; }
     .topics::-webkit-scrollbar{ height:6px; }
@@ -883,7 +981,6 @@ const CONFIG = {
     .topic[aria-pressed="true"]{ background:#3f5d3f; border-color:#3f5d3f; color:#f2efdd; }
     .topic:focus-visible{ outline:2px dashed #6f9370; outline-offset:2px; }
 
-    /* ---------- conversación ---------- */
     .log{ flex:1; overflow-y:auto; padding:16px 14px 8px; display:flex; flex-direction:column; gap:11px; }
     .log::-webkit-scrollbar{ width:8px; }
     .log::-webkit-scrollbar-thumb{ background:#d5caa8; border-radius:8px; }
@@ -910,7 +1007,6 @@ const CONFIG = {
       border-radius:7px; padding:3px 8px; display:flex; gap:5px; align-items:center; }
     .src svg{ width:11px; height:11px; flex:none; }
 
-    /* ---------- compositor ---------- */
     .composer{ display:flex; gap:10px; padding:11px 12px 13px; border-top:1px solid #e2d8bc; }
     .composer input{ flex:1; min-width:0; background:#fffdf4; border:1.5px solid #cfc4a2;
       border-radius:12px; padding:10px 13px; font:15px Karla,sans-serif; color:#37402c;
@@ -926,9 +1022,9 @@ const CONFIG = {
     .composer button:focus-visible, input:focus-visible{ outline:2px dashed #6f9370; outline-offset:2px; }
 
     @media (max-width:520px){
-      .launcher{ width:74px; height:74px; }
-      .panel{ bottom:92px; width:calc(100vw - 20px); height:calc(100dvh - 122px); }
-      .invite{ right:84px; max-width:178px; }
+      .launcher{ width:78px; height:78px; }
+      .panel{ bottom:96px; width:calc(100vw - 20px); height:calc(100dvh - 126px); }
+      .invite{ right:88px; max-width:178px; }
     }
     @media (prefers-reduced-motion:reduce){
       *, *::before, *::after{ animation-duration:.001s !important;
@@ -962,9 +1058,6 @@ const CONFIG = {
 
   document.body.appendChild(host);
 
-  /* ================================================================
-     6) LÓGICA DEL WIDGET
-     ================================================================ */
   const $fj = s => root.querySelector(s);
   const launcher = $fj('.launcher'), invite = $fj('.invite'), panel = $fj('.panel'),
         badge = $fj('.badge'), log = $fj('#fj-log'), inp = $fj('#fj-inp'),
@@ -978,7 +1071,6 @@ const CONFIG = {
                   queue: [], unread: 0, greeted: false, chat: 'idle' };
   let inviteT = null;
 
-  /* ---- ojos que siguen al cursor (un solo rAF para las dos instancias) ---- */
   let px = null, py = null;
   addEventListener('pointermove', e => { px = e.clientX; py = e.clientY; }, { passive: true });
   if (!RM) (function eyeLoop() {
@@ -999,7 +1091,6 @@ const CONFIG = {
     requestAnimationFrame(eyeLoop);
   })();
 
-  /* ---- estados visibles ---- */
   const STATUS = { idle: 'vigilando la neblina', thinking: 'rumiando la respuesta…', talking: 'conversando…' };
   function setChatState(s) {
     state.chat = s;
@@ -1009,7 +1100,6 @@ const CONFIG = {
     headChar.talk(s === 'talking');
   }
 
-  /* ---- mensajes ---- */
   const hora = () => new Date().toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
   const stamp = b => { const t = document.createElement('span'); t.className = 'time';
                        t.textContent = hora(); b.appendChild(t); };
@@ -1065,9 +1155,8 @@ const CONFIG = {
     }, long ? 24 : 20);
   }
 
-  /* ---- flujo pregunta → RAG ---- */
-  const ERRMSG = 'Uy, caminante: la neblina se comió la señal y mi memoria (el RAG) no respondió. ' +
-                 'Revísame la conexión del endpoint y pregúntame de nuevo en un momentico.';
+  const ERRMSG = 'Uy, caminante: la neblina se comió la señal y mi memoria no respondió. ' +
+                 'Revísame la conexión y pregúntame de nuevo en un momentico.';
   async function respond(question) {
     state.busy = true; setChatState('thinking'); showTyping();
     let res;
@@ -1092,7 +1181,6 @@ const CONFIG = {
     inp.value = ''; send(v);
   });
 
-  /* ---- temas (metadatos del RAG) ---- */
   function renderTopics() {
     topicsBox.innerHTML = '';
     CONFIG.topics.forEach(t => {
@@ -1117,7 +1205,6 @@ const CONFIG = {
     } catch (e) {}
     renderTopics();
   })();
-  // Si defines topicsEndpoint, se intentan cargar los temas reales del RAG:
   if (!CONFIG.useMock && CONFIG.topicsEndpoint) {
     fetch(CONFIG.topicsEndpoint)
       .then(r => r.json())
@@ -1134,7 +1221,6 @@ const CONFIG = {
       }).catch(() => {});
   }
 
-  /* ---- abrir / cerrar ---- */
   function clearUnread() { state.unread = 0; badge.hidden = true; }
   function bumpUnread() {
     if (state.open) return;
@@ -1169,7 +1255,6 @@ const CONFIG = {
   closeBtn.addEventListener('click', closePanel);
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && state.open) closePanel(); });
 
-  /* ---- invitación inicial ---- */
   setTimeout(() => {
     if (!state.open) {
       invite.classList.add('show'); mainChar.tap();
@@ -1177,8 +1262,6 @@ const CONFIG = {
     }
   }, 3500);
 })();
-
-</script>
-<!-- ================ FIN DEL WIDGET ================ -->
+</script><!-- ================ FIN DEL WIDGET ================ -->
 </body>
 </html>
