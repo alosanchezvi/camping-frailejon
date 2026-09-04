@@ -377,7 +377,8 @@
         
         // --- Mensajes para el botón de WhatsApp ---
         msg_pacho: "Hola Ruta Frailejón, quiero más info sobre la salida a Peñas de Pacho 🌊",
-        msg_verde: "Hola Ruta Frailejón, quiero más info sobre la salida a Laguna Verde 🌲"
+        msg_verde: "Hola Ruta Frailejón, quiero más info sobre la salida a Laguna Verde 🌲",
+        msg_verde: "Hola Ruta Frailejón, quiero más info sobre la salida a Sendero Suasie 🌲"
       },
       en: {
         title: "Ruta Frailejón — Páramo, Mist & Adventure",
@@ -483,13 +484,15 @@
       
       const mensajes = {
         'Peñas de Pacho': t.msg_pacho,
-        'Laguna Verde': t.msg_verde
+        'Laguna Verde': t.msg_verde,
+        'Sendero Suasie': t.msg_Suasie
       };
 
       // Mostrar nombre traducido en el modal
       const nombresTraducidos = {
         'Peñas de Pacho': t.ruta_pacho,
-        'Laguna Verde': t.ruta_verde
+        'Laguna Verde': t.ruta_verde,
+        'Sendero Suasie': t.msg_Suasie
       };
 
       document.getElementById('modalTitulo').textContent = nombresTraducidos[ruta] || ruta;
